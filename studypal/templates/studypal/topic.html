@@ -1,0 +1,33 @@
+{% extends "studypal/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}'
+{% load static %}
+<div>
+    <h2>{{object.name}}</h2>
+    <h5>Topic Description</h5>
+    <p>{{ object.description }} </p>
+    <h5>Topic Content</h5>   
+    <p>{{ object.content }} </p>
+    <video id="myvideo" width="640" height="360" controls>
+        <source src="{{ object.video_file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+        {% if topicinsub %}
+            <track kind="subtitles" src="{{ subs.subtitle.url }}" srclang="en" label="English" default>
+        {% endif %}
+    </video>
+    <div id="subtitles-container"></div>
+<hr>
+</div>
+<div>
+    <p>
+        Dear students, taking the quiz is an essential part of your learning journey. It not only helps reinforce what you've learned but also contributes to your overall course grading.
+    </p>
+    <p>
+        The quiz is designed to assess your understanding of the course material, and your performance will be reflected in your final grade. Don't miss out on this opportunity to showcase your knowledge!
+    </p>
+    <p>
+        Take the quiz now and give your best effort. Your success in the quiz will contribute positively to your academic progress.
+    </p>
+    <a class="btn btn-danger" href="{% url 'quizpage' object.id %}">Take Quiz</a>
+</div>
+{%endblock%}

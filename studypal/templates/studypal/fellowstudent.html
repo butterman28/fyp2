@@ -1,0 +1,13 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+<hr>
+    <div>
+    {% for i in classroom %}
+    <h2>{{i.student}}</h2>
+    <a href="{% url 'message:send_message' receiver_username=i.student.username %}">
+        <button>Message {{ product.author.username }}</button>
+      </a>
+    {% endfor %}
+    <p> Created By:{{ teachername }} </p>
+    </div>
+{% endblock %}

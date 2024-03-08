@@ -1,0 +1,52 @@
+{% extends "studypal/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{%  if userislecturer == True %}
+<div>
+    <h2>Edit Topic Details </h2>
+    <form method="post"  enctype="multipart/form-data" action="{% url 'topicupdate' object.id  %}">
+        {% csrf_token %}
+        {{ topicupdateform|crispy }}
+        <button type="submit" class="btn btn-danger" >Update The Topic</button>
+    </form>
+    {%  if alreadyhasquiz == False %}
+        <h2>Almost There.... to make your topic visible add quiz question</h2>
+    {%else%}
+        <h2> Add More Questions <h2>
+    {%endif%}  
+    <form method="post" action="{% url 'submit-quiz' object.id %}">
+        {% csrf_token %}
+        {{ quiz_form|crispy}}
+        {% if topic_in_quiz == True %}
+            <button class="btn btn-danger"  type="submit">Add another Quiz</button>
+        {%else%}
+            <button class="btn btn-danger" type="submit">Add a Quiz</button>
+        {%endif%}
+        <a class="btn btn-danger" href="{% url 'courses' %}">Skip for Now</a>
+    </form>
+    <hr>
+    {% for q in topicsquiz  %} 
+        {{q.questiontype}}
+        {% if q.questiontype == "objective" and q.id in hasnobj %}
+                {{obj}}
+                <form method="post" action="{% url 'submit-option' q.id %}">
+                    {% csrf_token %}
+                    {{ objform|crispy}}
+                    <button type="submit">Add Options for just submited Obj Question</button>
+                </form>
+            {%endif%}
+        {% endfor %}
+    </div>
+    {%else%}
+    <div>
+        <h2>{{object.name}}</h2>
+        <p>{{ object.description }} </p>
+        <video width="640" height="360" controls>
+            <source src="{{ object.video_file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+{%endif%}
+
+{% endblock %}

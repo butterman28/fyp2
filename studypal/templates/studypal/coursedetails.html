@@ -1,0 +1,47 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+<div>
+<h2>{{object.name}}</h2>
+{% if user.disabilityprofile %}
+{% if user_isenrolled == False %}
+<p>
+    By joining this course, you'll become a part of a supportive community of learners with diverse abilities. While you have the option to learn independently, joining the disabled class offers unique advantages. You can connect with fellow members who complement each other's abilities. For instance:
+</p>
+
+<ul>
+    <li>If you are blind, you can collaborate with someone who is deaf but can see and talk.</li>
+    <li>If you are deaf, you can communicate with someone who is blind and can provide hearing and someone who is dumb but can provide writing.</li>
+    <li> Since deafness and blindess comes in spectrum channel your strength and weaknesses properly</li>
+    <li>This collaborative environment fosters mutual support, creating a space where everyone can learn and grow together.</li>
+    <li>for verified users living in close proximity, which we would try how best to make possible via proper class allocation algorithm, you can meet in classes and school or even in each others whatever to help each other out properly depending on your zeal.</li>
+    <li>Your Teacher is here to make this abstract machination work more effectively, feel free to reach out to him if this symbiotic reltionship of a class is lacking in any aspect.</li>
+    <li> For now we are focusing on those with sensory disabilities, we are yet to come to those with locomotive disabilites, that is, the lame and the handicapped </li>
+</ul>
+
+<p>
+    Remember, the disabled class is not just about individual learning; it's about building a community where members can share their strengths and overcome challenges collectively. Feel free to reach out to your teacher or fellow classmates for assistance, guidance, or simply to connect on your learning journey.
+</p>
+
+<a class="btn btn-danger" href="{% url 'course-enroll' object.id %}">Enroll In Course</a>
+{%endif%}
+{% endif %}
+{% if user_isenrolled == True %}
+<h3 class="btn btn-danger">Hurray,Your already enrolled , A Teacher will get across to you soon </h3>
+{%endif%}
+{% if user_in_lecturers == True %}
+<a class="btn btn-danger" href="{% url 'topic-create' object.id %}">Add a Topic</a>
+{% endif %}
+<p>{{object.description }} </p>
+</div>
+
+<h4>Topics:</h4>
+{% for topic in topics  %}
+<h6> {{topic.name}} </h6> 
+{% if useriscreator == True %}
+<a class="btn btn-danger" href="{% url 'topic-detail' topic.id %}">Update Topic</a>
+{%endif%} 
+<a class="btn btn-danger" href="{% url 'topic-view' topic.id %}">View Topic</a>
+<ul>
+</ul>
+{% endfor %}
+{% endblock %}

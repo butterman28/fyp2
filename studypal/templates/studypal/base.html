@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        {% load static %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <!-- Add this to the head section of your HTML file -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <script src="{% static 'js/htmx.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+        <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-h1fy2VCJvM9ZgHr2JGj05gJf3tOdA7twP8/eNGTmBf5Lq6q6cI1QGZ1Id9aOaxY3" crossorigin="anonymous"></script>
+        <title>StudyPal</title>
+        {% if request.user.is_authenticated %}
+        <link rel="stylesheet" href="{% static 'css/' %}{{ request.user.userpreferences.color_theme }}.css">
+        <style>
+            body {
+                font-size: {{ request.user.userpreferences.font_size }}px;
+                background-color: {{request.user.userpreferences.color_theme }};
+                filter: brightness({{request.user.userpreferences.brightness }}%);
+                color:{{request.user.userpreferences.font_color }};
+            }
+        </style>
+    {% endif %}
+    </head>
+    <body>
+        <header>
+            <div class="px-3 py-2 bg-dark text-white">
+              <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                  <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                  </a>
+        
+                  <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                      <a href={% url "studypal-home"  %} class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
+                        Home
+                      </a>
+                    </li>
+                    <li>
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
+                        <button onclick="readText()" class="nav-link text-white btn btn-danger">Read Content</button>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li>
+                      <a href="{% url 'update_preferences' %}" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                        Update Preferences
+                      </a>
+                    </li>
+                    {% if user.samaritanprofile %}
+                    <li>
+                        <a href="{% url 'samprofile' %}" class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                          Profile
+                        </a>
+                      </li>
+                    {% endif %}
+                    {% if user.disabilityprofile %}
+                    <li>
+                      <a href="{% url 'disprofile' %}" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                        Profile
+                      </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'yourclasses' %}" class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                          Your Classes
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'coursedashboard' %}" class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                          Courses Dashboard
+                        </a>
+                      </li>
+                    {% endif %}
+                    {% if lecturerprofile.id %}
+                    <li>
+                      <a href="{% url 'lecturer-profile' pk=lecturerprofile.id %}"class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
+                        Lecturer Profile
+                      </a>
+                    </li>
+                    {%endif%}
+                    {% if teacherprofile.id %}
+                    <li>
+                      <a href="{% url 'teacher-profile' pk=teacherprofile.id %}" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
+                        Teacher Profile
+                      </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'classroom' %}" class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
+                         Your Classes
+                        </a>
+                      </li>
+                    {% endif %}
+                   <li>
+                      <a href="{% url 'courses' %}" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
+                        Courses
+                      </a>
+                    </li>
+                    <li>
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class ="nav-link text-white bi bi-box-arrow-left btn btn-danger"> logOut</button>
+                        </form>
+                    </li>   
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="px-3 py-2 border-bottom mb-3">
+              <div class="container d-flex flex-wrap justify-content-center">
+                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+                  <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                </form>
+                {%  else %}
+        
+                <div class="text-end">
+                     <a href="{% url 'login' %}" class="btn btn-light text-dark me-2">Login</a>
+                     <a href="{% url 'samregister' %}" class="btn btn-primary">Sign Up As a Samaritan</a>
+                     <a href="{% url 'disregister' %}" class="btn btn-primary">Learn With A Samaritan</a>
+                </div>
+              </div>
+            </div>
+           
+          </header>
+          {% endif %}
+          <main role="main" class="container-fluid">
+            <div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% block content %}{% endblock %}
+            </div>
+        </main>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+        <script>
+          function readText() {
+              // Get the text content of the entire page
+              var textToRead = document.body.innerText;
+  
+              // Create a new SpeechSynthesisUtterance
+              var utterance = new SpeechSynthesisUtterance();
+              utterance.text = textToRead;
+  
+              // Use the SpeechSynthesis API to speak the text
+              window.speechSynthesis.speak(utterance);
+          }
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('myvideo');
+            const subtitlesContainer = document.getElementById('subtitles-container');
+    
+            // Initialize the SpeechRecognition API
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+    
+            // Event handler for when speech is recognized
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+    
+                // Update subtitles container with the new transcript
+                subtitlesContainer.innerText = transcript;
+            };
+    
+            // Event handler for video play
+            video.addEventListener('play', function () {
+                // Start speech recognition when the video starts playing
+                recognition.start();
+            });
+    
+            // Event handler for video pause
+            video.addEventListener('pause', function () {
+                // Stop speech recognition when the video is paused
+                recognition.stop();
+            });
+        });
+    </script>
+    </body>
+</html>

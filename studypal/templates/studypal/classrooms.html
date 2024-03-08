@@ -1,0 +1,15 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+{%for i in classroom %}
+<hr>
+<p class="text-secondary fs-3"> Name:{{ i.student }}</p>
+<p class="text-secondary fs-3"> Address :{{ i.student.disabilityprofile.state}}, {{i.student.disabilityprofile.city}}</p>
+    <p class="text-secondary fs-3"> Gender :{{ i.student.disabilityprofile.gender }}</p>
+    <p class="text-secondary fs-3"> Grade :{{ i.student.disabilityprofile.grade }}</p>
+    <p class="text-secondary fs-3"> Age :{{ i.student.disabilityprofile.age }}</p>
+    <p class="text-secondary fs-3"> Disabilities :{{ i.student.disabilityprofile.disabilities }}</p>
+<hr>
+{%endfor%}
+
+
+{% endblock %}

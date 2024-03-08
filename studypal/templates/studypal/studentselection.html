@@ -1,0 +1,46 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+
+<h2>Teacher's Guide: Picking Students</h2>
+
+    <p>
+        As a teacher in the disabled class, it's important to consider the diverse abilities of your students and foster a collaborative learning environment. Here's a guide on how to pick students for your class:
+    </p>
+
+    <ul>
+        <li><strong>Consider Diverse Abilities:</strong> Take note of the diverse abilities present in your class, such as blindness, deafness, and other sensory disabilities.</li>
+        <li><strong>Encourage Collaborative Learning:</strong> Foster an environment where students can collaborate based on their complementary abilities. For example:
+            <ul>
+                <li>If a student is blind, they can collaborate with someone who is deaf but has strong visual and communication skills.</li>
+                <li>Consider pairing a deaf student with someone who is blind but proficient in writing.</li>
+            </ul>
+        </li>
+        <li><strong>Supportive Community:</strong> Emphasize the importance of building a supportive community within the class. Encourage students to share their strengths and help each other overcome challenges.</li>
+        <li><strong>Proximity-Based Collaboration:</strong> For verified users living in close proximity, facilitate opportunities for them to meet in person. This can enhance collaboration and support outside the virtual class environment.</li>
+        <li><strong>Reach Out for Assistance:</strong> Remind students that you, as the teacher, are here to facilitate effective collaboration. Encourage them to reach out to you if they feel the symbiotic relationship in the class needs improvement.</li>
+        <li><strong>Focus on Sensory Disabilities:</strong> At this time, the focus is on sensory disabilities. Be mindful of this when picking students and creating collaborative pairs.</li>
+    </ul>
+
+    <p>
+        Remember, the goal is to create a learning community where students can learn and grow together. Feel free to adapt these guidelines based on the specific needs and abilities of your students.
+    </p>
+    {{i.student.disabilityprofile}}
+{% if accomodate == True %}
+{%for i in enrollments %}
+{% if i.tutored == False %}
+<div class="media-body">
+    <h2 class="account-heading fs-3">Student Username:{{i.student.username}}</h2>
+    <p class="text-secondary fs-3"> Address :{{ i.student.disabilityprofile.state}}, {{i.student.disabilityprofile.city}}</p>
+    <p class="text-secondary fs-3"> Gender :{{ i.student.disabilityprofile.gender }}</p>
+    <p class="text-secondary fs-3"> Grade :{{ i.student.disabilityprofile.grade }}</p>
+    <p class="text-secondary fs-3"> Age :{{ i.student.disabilityprofile.age }}</p>
+    <p class="text-secondary fs-3"> Disabilities :{{ i.student.disabilityprofile.disabilities }}</p>
+    <a  class="btn btn-danger" href="{% url 'addstudent' i.student.id i.course.id %}">Pick Student</a>
+<hr>
+</div>
+{%endif%}
+{%endfor%}
+{% else %}
+<h2 class="account-heading fs-3">You Have hit the maximum update your profile to take more </h2>
+{%endif%}
+{% endblock %}

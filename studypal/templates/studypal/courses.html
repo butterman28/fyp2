@@ -1,0 +1,49 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+<hr>
+<div>
+    {% if user_in_lecturers == True %}
+        <a class="btn btn-danger" href="{% url 'course-create' %}">Create A Course</a>
+    
+<hr>
+<div>
+    <h1>Welcome, Inspiring Educators!</h1>
+    <p>Thank you for considering contributing your knowledge to our platform. We believe in creating an inclusive learning environment that caters to the needs of all individuals, including people with disabilities. Instead of creating new courses, you can add valuable topics to existing courses, enhancing the learning experience for our diverse community.</p>
+    
+    <p>Why contribute to existing courses?</p>
+    <ul>
+        <li>Collaborate with fellow educators in the same field.</li>
+        <li>Enrich the content of popular courses with your expertise.</li>
+        <li>Provide diverse perspectives to benefit a wider audience, including people with disabilities.</li>
+    </ul>
+
+    <p>Don't forget to add quizzes to your topics! Quizzes provide an interactive element that enhances the learning process and keeps learners engaged.</p>
+
+    <p>How to contribute:</p>
+    <ol>
+        <li>Add to our list of existing courses if your niche is yet to be carved out on our platform.</li>   
+        <li>If already carved, Explore our list of existing courses.</li>
+        <li>Identify a course that aligns with your expertise.</li>
+        <li>Add a new topic to the course with your unique insights.</li>
+        <li>Include a quiz to test learners' understanding and reinforce key concepts.</li>
+        <li>Ensure your content is accessible to all learners, including those with disabilities.</li>
+        <li>Engage with learners through accessible discussions and Q&A.</li>
+    </ol>
+
+    <p>Ready to contribute? Start by exploring our courses below ! </p>
+    
+    <p>If you have any questions or need assistance in creating accessible content or quizzes, feel free to contact us. Together, let's create an exceptional and inclusive learning environment for everyone!</p>
+</div>
+{% endif %}
+<hr>
+    <div>
+    {% for i in courses %}
+    <h2>{{i.name}}</h2>
+    <p> {{ i.description }} </p>
+    <p> Created By:{{ i.lecturer.lecturer.username }} </p>
+    <a class="btn btn-danger" href="{% url 'course-detail' i.id %}">Check It Out</a>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

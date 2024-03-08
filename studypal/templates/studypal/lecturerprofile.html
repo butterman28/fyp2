@@ -1,0 +1,16 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+<div class="content-section">
+    <div class="media">
+      <img
+        class="rounded-circle account-img"
+        src="{{ object.lecturer.samaritanprofile.image.url }}"
+      />
+      <div class="media-body">
+        <h2 class="account-heading fs-3">Teacher Username: {{ object.lecturer.username }}</h2>
+        <p class="text-secondary fs-3"> Email :{{ object.lecturer.email }}</p>
+        <p class="text-secondary fs-3"> Address: {{ object.lecturer.samaritanprofile.address}}</p>
+        <p class="text-secondary fs-3"> Phone Number: {{ object.lecturer.samaritanprofile.phonenumber}}</p>
+      </div>
+    </div>
+{%endblock%}

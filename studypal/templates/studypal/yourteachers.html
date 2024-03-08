@@ -1,0 +1,15 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+<div>
+  <hr>
+  {% for i in classes %}
+  <a class="btn btn-danger" href="{% url 'teacherdetail' i.teacher.id %}"> Teacher Username : {{i.teacher.teacher.username}}</a>
+  <p> click on him to know more and to also interact with the folks(classmates) he will be tutoring you with</p>
+  <a href="{% url 'message:send_message' receiver_username=i.teacher.teacher.username %}">
+    <button class="btn btn-danger">Message {{ i.teacher.teacher.username  }}</button>
+  </a>
+  <
+  {%endfor%}
+</div>
+{% endblock %}
+

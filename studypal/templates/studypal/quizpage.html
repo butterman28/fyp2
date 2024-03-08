@@ -1,0 +1,41 @@
+{% extends "studypal/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h3>Objective Questions</h3>
+{% for i in objoptions  %}
+{% for q in i  %}
+{% for j in objans  %}
+
+<h6>Answer is {{q.answerfilled}}</h6>
+{%if q.objquestion.questiontype == "objective"%}
+
+<h5> {{q.objquestion.question}}</h5>
+<p>
+    {{q.op1}}
+</p>
+<p>
+    {{q.op2}}
+</p>
+<p>
+    {{q.op3}}
+</p>
+<p>
+    {{q.op4}}
+</p>
+<div class= "obj">
+<form method="post" action="{% url 'submit-answer' q.id %}">
+    {% csrf_token %}
+    {{ opform|crispy}}
+    <button type="submit">Submit</button>
+    {%if correct %}
+        <a class="btn btn-success" href="#">Correct</a>
+    {%else%}
+        <a class="btn btn-danger" href="#">Wrong</a>
+    {%endif%}
+</form>
+</div>
+{%endif%}
+{%endfor%}
+{%endfor%}
+{%endfor%}
+{%endblock%}

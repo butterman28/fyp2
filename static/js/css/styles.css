@@ -1,0 +1,25 @@
+/*
+body {
+    direction: rtl;
+}
+
+.album {
+    text-align: right;
+}
+
+.card {
+    margin-bottom: 30px;
+}
+*/
+.like {}
+
+.obj {
+    margin-top: -192px;
+    margin-left: 250px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    column-gap: 10px;
+    row-gap: 10px;
+    padding: 0px;
+}

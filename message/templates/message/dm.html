@@ -1,0 +1,28 @@
+{% extends "studypal/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h2>Send Message to {{ receiver_username }}</h2>
+
+  <!-- Display Previous Messages -->
+  {% if messages_history %}
+    <ul>
+      {% for message in messages_history %}
+        <li>{{ message.receiver.username }}: {{ message.message }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No previous messages.</p>
+  {% endif %}
+
+  <!-- Form to Send New Message -->
+  <form method="post" action="{% url 'message:send_message' receiver_username=receiver_username %}"enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="message_text">Message:</label>
+    <textarea name="message_text" required></textarea>
+    <br>
+    <label for="message_image">Upload Image:</label>
+    <input type="file" name="message_image" accept="image/*">
+    <br>
+    <button type="submit">Send</button>
+  </form>
+{% endblock content %}

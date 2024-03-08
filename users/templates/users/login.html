@@ -1,0 +1,27 @@
+{% extends "studypal/base.html"%}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class = "border-bottom mb-4">Log In</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Log-In</button>
+                <small class ="text-muted ml-2">
+                    <a href="#"> Forgot Password</a>
+                </small>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+             Get the help you need from Our Platform<a class="ml-2" href="{%url 'disregister'%}">Sign Up as a Person with special need</a>
+            </small>
+            <small class="text-muted">
+                help the disabled learn by Contributing your time and patience <a class="ml-2" href="{%url 'samregister'%}">Sign Up as a Samaritan</a>
+            </small>
+        </div>
+    </div>
+{% endblock content%}

@@ -1,0 +1,11 @@
+{% extends "studypal/base.html" %}
+{% block content %}
+<h2> What class Can You teach or Tutor near perfectly </h2>
+{%for i in courses %}
+<div>
+<a class="btn btn-danger" href="{% url 'pickstudents' i.id %}">{{i.name}}:  Pick Students</a>
+<hr>
+</div>
+
+{%endfor%}
+{%endblock%}
