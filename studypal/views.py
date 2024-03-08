@@ -18,9 +18,10 @@ import uuid
 import environ
 from json import JSONDecodeError
 from users.models import *
-import speech_recognition as sr
-from moviepy.editor import *
-import assemblyai as aai
+
+# import speech_recognition as sr
+# from moviepy.editor import *
+# import assemblyai as aai
 import os
 
 base_dir = settings.BASE_DIR
@@ -164,35 +165,35 @@ class EnrollmentForm(forms.ModelForm):
         fields = ["course", "student"]
 
 
-class generatesubtitle(View):
-    def get(self, request, topicid):
-        topic = get_object_or_404(topics, id=topicid)
-        # Get the path to the video file
-        # video_path = topic.video_file.url
-        video_name = topic.video_file.name
-        video_path = os.path.join(settings.MEDIA_ROOT, video_name)
-        print(video_name)
-        complete_path = os.path.join(
-            "C:/Users/ithar/Desktop/finalyearproui/media", video_name
-        )
-        audio_clip = VideoFileClip(video_path).audio
-        audio_clip.write_audiofile(
-            "C:/Users/ithar/Desktop/finalyearproui/media/audio/sub.mp3"
-        )
-        aai.settings.api_key = "7e3a73239ae84d1583fa5625a66cfef5"
-        transcriber = aai.Transcriber()
-        transcript = transcriber.transcribe(
-            "C:/Users/ithar/Desktop/finalyearproui/media/audio/sub.mp3"
-        )
-        subs = transcript.export_subtitles_vtt()
-        # os.remove(audio_output_path)
-        subtittle = get_object_or_404(subtitles, topic=topic, subtitle=subs)
-        if not subtittle:
-            subtitles.objects.create(topic=topic, subtitle=subs)
-        if subtittle:
-            subtittle.subtitle = subs
-            subtittle.save()
-        return redirect("topic-view", pk=topicid)
+# class generatesubtitle(View):
+#   def get(self, request, topicid):
+#        topic = get_object_or_404(topics, id=topicid)
+#        # Get the path to the video file
+#        # video_path = topic.video_file.url
+#        video_name = topic.video_file.name
+#        video_path = os.path.join(settings.MEDIA_ROOT, video_name)
+#        print(video_name)
+#        complete_path = os.path.join(
+#            "C:/Users/ithar/Desktop/finalyearproui/media", video_name
+#        )
+#        audio_clip = VideoFileClip(video_path).audio
+#        audio_clip.write_audiofile(
+#            "C:/Users/ithar/Desktop/finalyearproui/media/audio/sub.mp3"
+#        )
+#        aai.settings.api_key = "7e3a73239ae84d1583fa5625a66cfef5"
+#        transcriber = aai.Transcriber()
+#        transcript = transcriber.transcribe(
+#            "C:/Users/ithar/Desktop/finalyearproui/media/audio/sub.mp3"
+#        )
+#        subs = transcript.export_subtitles_vtt()
+#        # os.remove(audio_output_path)
+#        subtittle = get_object_or_404(subtitles, topic=topic, subtitle=subs)
+#        if not subtittle:
+#            subtitles.objects.create(topic=topic, subtitle=subs)
+#        if subtittle:
+#            subtittle.subtitle = subs
+#            subtittle.save()
+#        return redirect("topic-view", pk=topicid)
 
 
 class enrollmentview(View):

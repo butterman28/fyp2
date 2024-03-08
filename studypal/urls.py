@@ -27,11 +27,11 @@ urlpatterns = [
         quizpageView.as_view(),
         name="quizpage",
     ),
-    path(
-        "generate/<int:topicid>/",
-        generatesubtitle.as_view(),
-        name="generate",
-    ),
+    #    path(
+    #        "generate/<int:topicid>/",
+    #        generatesubtitle.as_view(),
+    #        name="generate",
+    #    ),
     path(
         "submit-answer/<int:obj_id>/",
         submitobj.as_view(),
