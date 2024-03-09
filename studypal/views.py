@@ -42,6 +42,13 @@ class UserPreferencesForm(forms.Form):
         ),
         label="Font Size",
     )
+    word_spacing = forms.IntegerField(
+        initial=5,
+        widget=forms.NumberInput(
+            attrs={"min": 1, "max": 50, "type": "range", "class": "form-range"}
+        ),
+        label="Word Spacing",
+    )
     color_theme = forms.CharField(
         max_length=7,  # Assuming the color will be represented as a 7-character hex code
         initial="#ffffff",  # Set an initial color (white in this case)
@@ -64,10 +71,17 @@ class UserPreferencesForm(forms.Form):
 
 
 class ansForm(forms.Form):
-    answer = forms.ChoiceField(
+    answerfilled = forms.ChoiceField(
         label="Choose Only One of the below",
         choices=optype,
         widget=forms.RadioSelect,
+    )
+
+
+class theoryForm(forms.Form):
+    ans = forms.CharField(
+        label="Enter Your theory Answer answer is not Guaranteed like it obj counterpart ",
+        max_length=30,
     )
 
 
@@ -115,6 +129,7 @@ class UserPreferencesUpdateView(View):
         color_theme = request.POST.get("color_theme")
         brightness = request.POST.get("brightness")
         font_color = request.POST.get("font_color")
+        word_spacing = request.POST.get("word_spacing")
         userexist = UserPreferences.objects.filter(user=self.request.user).first()
         if userexist:
             userp = get_object_or_404(UserPreferences, user=self.request.user)
@@ -122,6 +137,7 @@ class UserPreferencesUpdateView(View):
             userp.font_size = font_size
             userp.font_color = font_color
             userp.brightness = brightness
+            userp.word_spacing = word_spacing
             userp.save()
         else:
             userp = UserPreferences(
@@ -130,6 +146,7 @@ class UserPreferencesUpdateView(View):
                 font_size=font_size,
                 brightness=brightness,
                 font_color=font_color,
+                word_spacing=word_spacing,
             )
         userp.save()
 
@@ -586,9 +603,10 @@ class topicview(DetailView):
 class quizpageView(View):
     template_name = "studypal/quizpage.html"
 
-    def get(self, request, quizid):
-        quizq = topicsquiz.objects.filter(topic__id=quizid)
+    def get(self, request, topicid):
+        quizq = topicsquiz.objects.filter(topic__id=topicid)
         opform = ansForm()
+        theory = theoryForm()
         objoptions = []
         objans = objanssheet.objects.filter(
             student=request.user,
@@ -611,6 +629,7 @@ class quizpageView(View):
             "objoptions": objoptions,
             "objans": objans,
             "opform": opform,
+            "theoryForm": theory,
         }
         return render(request, self.template_name, context)
 
@@ -634,40 +653,51 @@ class submitobj(View):
         form = ansForm(request.POST)
 
         if form.is_valid():
-            ans = form.cleaned_data["answer"]
+            ans = form.cleaned_data["answerfilled"]
             correctans = questioncheck.answer
             if not objans:
                 # If the item doesn't exist, create a new cart item
-                if ans == correctans:
-                    correct = True
-                    context = {"correct": correct}
-                else:
-                    correct = False
-                    context = {"correct": correct}
                 objans = objanssheet.objects.create(
                     question=question, student=request.user, answerfilled=ans
                 )
                 messages.success(request, "Objective options added successfully!")
             # Save the form data
 
-        if objans and objanssheet.answerfilled != None:
-            if ans == correctans:
-                correct = True
-                context = {"correct": correct}
-            else:
-                correct = False
-                context = {"correct": correct}
+        if objans and objans.answerfilled != None:
             objans.answerfilled = ans
             objans.save()
             messages.success(request, "submission Updated!")
-            redirect_url = reverse(
-                "quizpage", kwargs={"quizid": question.objquestion.topic.id}
-            )
-            redirect_url += f"?correct={correct}"
+            # redirect_url = reverse("quizpage", kwargs={"topicid": question.objquestion.topic.id})
+            # redirect_url += f"?correct={correct}"
 
-        return redirect(redirect_url)
+        # return redirect(redirect_url)
 
-        # return redirect("quizpage", quizid=question.objquestion.topic.id)
+        return redirect("quizpage", topicid=question.objquestion.topic.id)
+
+
+class submitheory(View):
+    def post(self, request, topicid):
+        question = get_object_or_404(topicsquiz, id=topicid)
+        theoryans = theoryanssheet.objects.filter(
+            question=question,
+            student=request.user,
+        ).first()
+        form = theoryForm(request.POST)
+        if form.is_valid():
+            ans = form.cleaned_data["ans"]
+            # correctans = questioncheck.answer
+            if not theoryans:
+                # If the item doesn't exist, create a new cart item
+                theoryans = theoryanssheet.objects.create(
+                    question=question, student=request.user, answer=ans
+                )
+                messages.success(request, " Submitted successfully!")
+        if theoryans and theoryans.answer != None:
+            theoryans.answer = ans
+            theoryans.save()
+            messages.success(request, "submission Updated!")
+
+        return redirect("quizpage", topicid=question.topic.id)
 
 
 class topicdetailview(DetailView, UserPassesTestMixin):

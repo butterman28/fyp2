@@ -32,9 +32,8 @@ class UsersamProfileForm(forms.ModelForm):
 
 class UserdisProfileForm(forms.ModelForm):
     disability_CHOICES = [
-        ("blind", "Blind"),
-        ("deaf", "Deaf"),
-        ("dumb", "Dumb"),
+        ("vpd", "VPD"),
+        ("dyslexia", "Dyslexia"),
         ("adhd", "ADHD"),
     ]
 

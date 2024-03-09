@@ -20,6 +20,7 @@ optype = (
 class UserPreferences(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     font_size = models.IntegerField(default=16)
+    word_spacing = models.IntegerField(default=5)
     color_theme = models.CharField(max_length=10, default="#ffffff")
     font_color = models.CharField(max_length=10, default="#000000")
     brightness = models.IntegerField(default=100)

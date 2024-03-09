@@ -27,7 +27,6 @@
     </form>
     <hr>
     {% for q in topicsquiz  %} 
-        {{q.questiontype}}
         {% if q.questiontype == "objective" and q.id in hasnobj %}
                 {{obj}}
                 <form method="post" action="{% url 'submit-option' q.id %}">

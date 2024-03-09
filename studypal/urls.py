@@ -23,7 +23,7 @@ urlpatterns = [
         name="teacherdetail",
     ),
     path(
-        "quiz/<int:quizid>/",
+        "quiz/<int:topicid>/",
         quizpageView.as_view(),
         name="quizpage",
     ),
@@ -36,6 +36,11 @@ urlpatterns = [
         "submit-answer/<int:obj_id>/",
         submitobj.as_view(),
         name="submit-answer",
+    ),
+    path(
+        "submit-theory/<int:topicid>/",
+        submitheory.as_view(),
+        name="submit-theory",
     ),
     path(
         "updatetopic/<int:topicid>/",

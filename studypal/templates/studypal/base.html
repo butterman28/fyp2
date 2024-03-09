@@ -28,6 +28,7 @@
                 background-color: {{request.user.userpreferences.color_theme }};
                 filter: brightness({{request.user.userpreferences.brightness }}%);
                 color:{{request.user.userpreferences.font_color }};
+                word-spacing: {{ request.user.userpreferences.word_spacing }}px;
             }
         </style>
     {% endif %}
@@ -50,7 +51,7 @@
                     </li>
                     <li>
                         <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
-                        <button onclick="readText()" class="nav-link text-white btn btn-danger">Read Content</button>
+                        <button onclick="toggleReading()"class="nav-link text-white btn btn-danger">Toggle Read Page On or Off</button>
                     </li>
                     {% if user.is_authenticated %}
                     <li>
@@ -161,18 +162,47 @@
         
         <script src="" async defer></script>
         <script>
+          // Initialize a variable to track whether the reading is enabled
+          var readingEnabled = true;
+        
+          // Function to toggle reading status
+          function toggleReading() {
+            readingEnabled = !readingEnabled;
+        
+            // If reading is enabled, read the page content
+            if (readingEnabled) {
+              readText();
+            } else {
+              // If reading is disabled, cancel the ongoing speech
+              window.speechSynthesis.cancel();
+            }
+          }
+        
+          // Function to read the text content of the entire page
           function readText() {
+            // Check if the SpeechSynthesis API is supported
+            if ('speechSynthesis' in window) {
               // Get the text content of the entire page
               var textToRead = document.body.innerText;
-  
+        
               // Create a new SpeechSynthesisUtterance
               var utterance = new SpeechSynthesisUtterance();
               utterance.text = textToRead;
-  
+        
               // Use the SpeechSynthesis API to speak the text
               window.speechSynthesis.speak(utterance);
+            } else {
+              console.error('SpeechSynthesis API is not supported in this browser.');
+            }
           }
-      </script>
+        
+          // Read the page content when the page loads
+          window.addEventListener('load', function () {
+            if (readingEnabled) {
+              readText();
+            }
+          });
+        </script>
       <script>
         document.addEventListener('DOMContentLoaded', function () {
             const video = document.getElementById('myvideo');

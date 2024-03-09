@@ -30,7 +30,7 @@ urlpatterns = [
     path("disprofile/", user_views.disprofile, name="disprofile"),
     path("samprofile/", user_views.samprofile, name="samprofile"),
     path(
-        "login/",
+        "",
         auth_views.LoginView.as_view(template_name="users/login.html"),
         name="login",
     ),
