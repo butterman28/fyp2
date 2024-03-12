@@ -368,8 +368,12 @@ class createteacher(LoginRequiredMixin, CreateView):
     #  form.instance.user = self.request.user
     # return super().form_valid(form)
     def form_valid(self, form):
-        form.instance.teacher = self.request.user
-        return super().form_valid(form)
+        teacherexist = Teachers.objects.filter(teacher=self.request.user).exists()
+        if teacherexist:
+            return HttpResponseForbidden("You are already registered as a teacher.")
+        if teacherexist == False:
+            form.instance.teacher = self.request.user
+            return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
