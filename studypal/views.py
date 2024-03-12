@@ -10,7 +10,8 @@ from django.contrib.auth.mixins import *
 from django.db.models import Q
 from django.conf import settings
 from django import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+
 import math
 import requests
 import time
@@ -465,8 +466,12 @@ class createlecturer(LoginRequiredMixin, CreateView):
     # return super().form_valid(form)
 
     def form_valid(self, form):
-        form.instance.lecturer = self.request.user
-        return super().form_valid(form)
+        lecturerexist = Lecturers.objects.filter(lecturer=self.request.user).exists()
+        if lecturerexist:
+            return HttpResponseForbidden("You are already registered as a lecturer.")
+        if lecturerexist == False:
+            form.instance.lecturer = self.request.user
+            return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
