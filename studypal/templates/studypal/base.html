@@ -88,14 +88,12 @@
                         </a>
                       </li>
                     {% endif %}
-                    {% if lecturerprofile.id %}
                     <li>
-                      <a href="{% url 'lecturer-profile' pk=lecturerprofile.id %}"class="nav-link text-white">
+                      <a href="{% url 'lecturer-profile' %}"class="nav-link text-white">
                         <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
                         Lecturer Profile
                       </a>
                     </li>
-                    {%endif%}
                     {% if teacherprofile.id %}
                     <li>
                       <a href="{% url 'teacher-profile' pk=teacherprofile.id %}" class="nav-link text-white">
@@ -129,8 +127,8 @@
             </div>
             <div class="px-3 py-2 border-bottom mb-3">
               <div class="container d-flex flex-wrap justify-content-center">
-                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-                  <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" action="{% url 'search_results' %}" method="get">
+                  <input type="search" class="form-control"type="submit" name = "q" placeholder="Search..." aria-label="Search">
                 </form>
                 {%  else %}
         
@@ -163,46 +161,40 @@
         <script src="" async defer></script>
         <script>
           // Initialize a variable to track whether the reading is enabled
-          var readingEnabled = true;
-        
+          var readingEnabled = false;
+      
           // Function to toggle reading status
           function toggleReading() {
-            readingEnabled = !readingEnabled;
-        
-            // If reading is enabled, read the page content
-            if (readingEnabled) {
-              readText();
-            } else {
-              // If reading is disabled, cancel the ongoing speech
-              window.speechSynthesis.cancel();
-            }
+              readingEnabled = !readingEnabled;
+      
+              // If reading is enabled, read the page content
+              if (readingEnabled) {
+                  readText();
+              } else {
+                  // If reading is disabled, cancel the ongoing speech
+                  window.speechSynthesis.cancel();
+              }
           }
-        
-          // Function to read the text content of the entire page
+      
+          // Function to read the text content of the body
           function readText() {
-            // Check if the SpeechSynthesis API is supported
-            if ('speechSynthesis' in window) {
-              // Get the text content of the entire page
-              var textToRead = document.body.innerText;
-        
-              // Create a new SpeechSynthesisUtterance
-              var utterance = new SpeechSynthesisUtterance();
-              utterance.text = textToRead;
-        
-              // Use the SpeechSynthesis API to speak the text
-              window.speechSynthesis.speak(utterance);
-            } else {
-              console.error('SpeechSynthesis API is not supported in this browser.');
-            }
+              // Check if the SpeechSynthesis API is supported
+              if ('speechSynthesis' in window) {
+                  // Get the text content of the body
+                  var mainContent = document.querySelector('main');
+                  var textToRead = mainContent.innerText;
+      
+                  // Create a new SpeechSynthesisUtterance
+                  var utterance = new SpeechSynthesisUtterance();
+                  utterance.text = textToRead;
+      
+                  // Use the SpeechSynthesis API to speak the text
+                  window.speechSynthesis.speak(utterance);
+              } else {
+                  console.error('SpeechSynthesis API is not supported in this browser.');
+              }
           }
-        
-          // Read the page content when the page loads
-          window.addEventListener('load', function () {
-            if (readingEnabled) {
-              readText();
-            }
-          });
-        </script>
+      </script>
       <script>
         document.addEventListener('DOMContentLoaded', function () {
             const video = document.getElementById('myvideo');

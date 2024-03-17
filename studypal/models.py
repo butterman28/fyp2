@@ -111,24 +111,4 @@ class theoryanssheet(models.Model):
     answer = models.TextField(null=True)
 
 
-class Teachers(models.Model):
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
-    handlesize = models.PositiveIntegerField(
-        verbose_name="size of class you can handle", default=3, blank=False, null=False
-    )
-
-    def get_absolute_url(self):
-        return reverse("teacher-profile", kwargs={"pk": self.pk})
-
-
-class classroom(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teachers, on_delete=models.CASCADE)
-
-
-class classparticipants(models.Model):
-    classroomid = models.ForeignKey(classroom, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
 # Create your models here.

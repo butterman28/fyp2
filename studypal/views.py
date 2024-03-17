@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.conf import settings
 from django import forms
 from django.http import HttpResponse, HttpResponseForbidden
-
+from functools import reduce
 import math
 import requests
 import time
@@ -162,8 +162,6 @@ class orientationView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
 
@@ -172,8 +170,6 @@ class teacherorientView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
 
@@ -232,33 +228,6 @@ class enrollmentview(View):
         return redirect("course-detail", pk=course_id)
 
 
-class yourclasses(ListView):
-    template_name = "studypal/yourteachers.html"
-    model = classroom
-    context_object_name = "cl"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        classes = classroom.objects.filter(student=self.request.user)
-        context["classes"] = classes
-        return context
-
-
-class teacherdetail(View):
-    template_name = "studypal/fellowstudent.html"
-
-    def get(self, request, teacherid):
-        teachers = get_object_or_404(Teachers, id=teacherid)
-        teachername = teachers.teacher.username
-        student = request.user
-        classr = classroom.objects.filter(
-            teacher=teachers,
-        )
-        context = {"classroom": classr, "teachername": teachername}
-        return render(request, self.template_name, context)
-        # return redirect("course-detail", pk=course_id)
-
-
 class cousedashboard(ListView):
     template_name = "studypal/coursedashboard.html"
     model = Courses
@@ -280,7 +249,6 @@ class courseListView(ListView):
         context = super(courseListView, self).get_context_data(**kwargs)
         # context["disabled"] = disabilityProfile.objects.all()
         context["lecturers"] = Lecturers.objects.all()
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
         # context["artlikes"] = artlike.objects.all()
         # context["subform"] = SubscribeForm()
         for i in Courses.objects.all():
@@ -292,7 +260,6 @@ class courseListView(ListView):
             ).exists()
             print(user_in_lecturers)
             context["user_in_lecturers"] = user_in_lecturers
-            context["teacherprofile"] = teacherprofile
         return context
 
 
@@ -306,13 +273,11 @@ class PostListView(ListView):
         context = super(PostListView, self).get_context_data(**kwargs)
         context["disabled"] = disabilityProfile.objects.all()
         context["samaritans"] = samaritanProfile.objects.all()
-        context["Teachers"] = Teachers.objects.all()
         # context["artlikes"] = artlike.objects.all()
         # context["subform"] = SubscribeForm()
         user_in_samaritans = False
         user_in_disabled = False
         user_in_lecutures = False
-        userinteachers = False
 
         if self.request.user.is_authenticated:
             user_in_samaritans = samaritanProfile.objects.filter(
@@ -324,8 +289,6 @@ class PostListView(ListView):
             user_in_lecturers = Lecturers.objects.filter(
                 lecturer=self.request.user
             ).exists()
-            userinteachers = Teachers.objects.filter(teacher=self.request.user).exists()
-            teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
             lecturerprofile = Lecturers.objects.filter(
                 lecturer=self.request.user
             ).first()
@@ -333,8 +296,6 @@ class PostListView(ListView):
             context["user_in_lecturers"] = user_in_lecturers
             context["user_in_samaritans"] = user_in_samaritans
             context["user_in_disabled"] = user_in_disabled
-            context["userinteachers"] = userinteachers
-            context["teacherprofile"] = teacherprofile
         user = self.request.user
         return context
 
@@ -348,8 +309,6 @@ class createcourse(LoginRequiredMixin, CreateView):
     # return super().form_valid(form)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
     def form_valid(self, form):
@@ -360,58 +319,60 @@ class createcourse(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("courses")
 
 
-class createteacher(LoginRequiredMixin, CreateView):
-    model = Teachers
-    fields = ["handlesize"]
-
-    # def form_valid(self, form):
-    #  form.instance.user = self.request.user
-    # return super().form_valid(form)
-    def form_valid(self, form):
-        teacherexist = Teachers.objects.filter(teacher=self.request.user).exists()
-        if teacherexist:
-            return HttpResponseForbidden("You are already registered as a teacher.")
-        if teacherexist == False:
-            form.instance.teacher = self.request.user
-            return super().form_valid(form)
+class SearchResultsView(TemplateView):
+    template_name = "studypal/search_results.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
+        query = self.request.GET.get("q", "")
+
+        results_a = Lecturers.objects.filter(
+            reduce(
+                lambda x, y: x | y,
+                (
+                    Q(**{f.name + "__icontains": query})
+                    for f in Lecturers._meta.fields
+                    if "proofofqualific" not in f.name
+                ),
+            )
+        )
+        results_b = Courses.objects.filter(
+            reduce(
+                lambda x, y: x | y,
+                (
+                    Q(**{f.name + "__icontains": query})
+                    for f in Courses._meta.fields
+                    if "lecturer" not in f.name
+                ),
+            )
+        )
+        context["results_a"] = results_a
+        context["results_b"] = results_b
         return context
 
 
-class teacherDetailView(DetailView, UserPassesTestMixin):
-    model = Teachers
-    template_name = "studypal/teacher-profile.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        teacher_instance = self.object
-        # Access the associated User instance
-        user_instance = teacher_instance.teacher
-        # Access the associated SamaritanProfile instance
-        samaritan_profile = user_instance.samaritanprofile
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
-        return context
-
-
-class lecturerDetailView(DetailView, UserPassesTestMixin):
+class lecturerDetailView(ListView, UserPassesTestMixin):
     model = Lecturers
     template_name = "studypal/lecturerprofile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        lecturer_instance = self.object
+        # lecturer_instance = self.object
+        if Lecturers.objects.filter(lecturer=self.request.user).exists() == True:
+            lecturer = Lecturers.objects.get(lecturer=self.request.user)
+            context["lecturer"] = lecturer
+            context["courses"] = Courses.objects.filter(
+                lecturer=Lecturers.objects.filter(lecturer=self.request.user).first()
+            )
+            context["show"] = True
+            return context
+        if Lecturers.objects.filter(lecturer=self.request.user).exists() == False:
+            context["show"] = False
+            return context
         # Access the associated User instance
-        user_instance = lecturer_instance.lecturer
+        # user_instance = lecturer_instance.lecturer
         # Access the associated SamaritanProfile instance
-        samaritan_profile = user_instance.samaritanprofile
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
-        return context
+        # samaritan_profile = user_instance.samaritanprofile
 
 
 class quiz_submitview(View):
@@ -454,8 +415,6 @@ class createtopic(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
     # success_url = reverse_lazy("topic-detail")
@@ -479,8 +438,6 @@ class createlecturer(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
     success_url = reverse_lazy("courses")
@@ -491,81 +448,9 @@ class CourseSelectView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
         courses = Courses.objects.all()
         context["courses"] = courses
-        context["teacherprofile"] = teacherprofile
         return context
-
-
-class pickstudents(View):
-    template_name = "studypal/studentselection.html"
-
-    def get(self, request, *args, **kwargs):
-        # Retrieve course_id from URL parameters
-        course_id = self.kwargs.get("course_id")
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        enrollments = courseenrollment.objects.filter(course__id=course_id)
-        classr = classroom.objects.filter(teacher=teacherprofile).first()
-        courses = Courses.objects.all()
-        classes = classroom.objects.all()
-        classsize = classroom.objects.filter(teacher=teacherprofile)
-        if len(classsize) < teacherprofile.handlesize:
-            accomodate = True
-            context = {
-                "accomodate": accomodate,
-                "classes": classes,
-                "classr": classr,
-                "enrollments": enrollments,
-                "courses": courses,  # Assuming you have a variable named 'courses' available
-                "teacherprofile": teacherprofile,
-            }
-        if len(classsize) >= teacherprofile.handlesize:
-            accomodate = False
-            context = {
-                "accomodate": accomodate,
-                "classes": classes,
-                "classr": classr,
-                "enrollments": enrollments,
-                "courses": courses,  # Assuming you have a variable named 'courses' available
-                "teacherprofile": teacherprofile,
-            }
-
-        return render(request, self.template_name, context)
-
-
-class addtoclass(View):
-    def get(self, request, *args, **kwargs):
-        studentid = self.kwargs.get("student_id")
-        courseid = self.kwargs.get("course_id")
-        course_id = courseid
-        course = Courses.objects.filter(id=courseid)
-        student = get_object_or_404(User, id=studentid)
-        teacher = Teachers.objects.filter(teacher=self.request.user).first()
-        enroll = courseenrollment.objects.filter(
-            student=studentid, course=courseid
-        ).first()
-        classsize = classroom.objects.filter(teacher=teacher)
-        print(enroll)
-        if len(classsize) < teacher.handlesize:
-            classroom.objects.create(student=student, teacher=teacher)
-            enroll.tutored = True
-            enroll.save()
-            suc = "Added to class"
-            return redirect("pickstudents", course_id=course_id)
-        else:
-            suc = "The Number of Students you can handle is exceeded"
-            return redirect("pickstudents", course_id=course_id)
-
-
-class yourclassviews(View):
-    template_name = "studypal/classrooms.html"
-
-    def get(self, request, *args, **kwargs):
-        teacher = Teachers.objects.filter(teacher=self.request.user).first()
-        classr = classroom.objects.filter(teacher=teacher)
-        context = {"classroom": classr}
-        return render(request, self.template_name, context)
 
 
 class courseDetailView(DetailView, UserPassesTestMixin):
@@ -585,11 +470,11 @@ class courseDetailView(DetailView, UserPassesTestMixin):
         user_isenrolled = courseenrollment.objects.filter(
             student=self.request.user, course=self.object
         ).exists()
+        enrolled = courseenrollment.objects.filter(course=self.object)
         context["user_isenrolled"] = user_isenrolled
+        context["enrolled"] = enrolled
         context["user_in_lecturers"] = user_in_lecturers
         context["topics"] = topics.objects.filter(course=self.object)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         # context["review_form"] = ArtReviewForm()
         # Include existing reviews for the clothing in the context
         return context
@@ -604,8 +489,6 @@ class topicview(DetailView):
         context["subs"] = subtitles.objects.filter(topic=self.object)
         context["topicsquiz"] = topicsquiz.objects.filter(topic=self.object)
         context["topicinsub"] = subtitles.objects.filter(topic=self.object).exists()
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
 
@@ -648,8 +531,6 @@ class submitobj(View):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
     def post(self, request, obj_id):
@@ -739,8 +620,6 @@ class topicdetailview(DetailView, UserPassesTestMixin):
         print(
             topics.objects.filter(course__lecturer__lecturer=self.request.user).exists()
         )
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         context["topic_in_quiz"] = topic_in_quiz
         context["quiz_form"] = TopicsQuizForm()
         context["topicupdateform"] = topicupdateform()
@@ -768,8 +647,6 @@ class TopicsQuizSubmissionView(View):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        teacherprofile = Teachers.objects.filter(teacher=self.request.user).first()
-        context["teacherprofile"] = teacherprofile
         return context
 
     def post(self, request, test_id):
