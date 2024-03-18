@@ -1,31 +1,44 @@
 {% extends "studypal/base.html" %}
 {% block content %}
-<div>
+{% load static %}
+<style>
+    
+</style>
     {% if user_in_samaritans %}
-        <h1>Welcome Educator</h1>
-        <p>This platform is dedicated to making a positive impact on the lives of individuals with disabilities. Your willingness to extend an olive branch to those in need of assistance is truly commendable. Your contributions can take various forms, such as:</p>
-        <ul>
-            {% if user_in_lecturers == False %}
-            <li>Creating a new course to empower them. <a class="btn btn-danger" href="{% url 'welcomelecturer' %}">Be a Lecturer</a></li>
-            {%endif%}
-            {% if userinteachers == False %}
-            <li>Becoming a teacher for a class of individuals with disabilities.<a class="btn btn-danger" href="{% url 'welcometeacher' %}">Be a Teacher</a></li>
-            {%endif%}
-            <li>Providing learning assistance tailored to cater to specific disabilities.</li>
-        </ul>
-        <p>Your commitment to creating a new course opens up avenues for them to learn and grow. By offering your expertise and support, you become an essential part of their educational journey.</p>
+    <div class = "welcome">
+        <h1 class="weltext">Welcome, inspiring educator!</h1>
+        <div class="creatcourse">        
+            <a  href="{% url 'course-create' %}">Create A Course <i class="bi bi-pencil"></i></a>
+        </div>
+    </div>
+        <div class="text1">
+            <div class="divheader">
+                <h3>Hello, James!</h3>
+            </div>
+            <div class="paratext">
+                <p>                
+                Thank you for considering contributing your knowledge to this platform. 
+                We believe in creating an inclusive learning environment that caters to  the needs of all individuals, 
+                including people with learning disabilities. Instead of ceating new courses, you can add valuable topics to the existing courses, 
+                enhancing the learning experience for our diverse community.
+                </p>
+            </div>
+        </div>
+        <div class="sidediv">
+            <p>How to contribute?</p>
+            <ul class="no-dots">
+                <li class= "innodots"><i class="bi bi-arrow-up-right arrow"></i> Add to our list of existing courses, if your niche is yet to be carved out on our platform</li>
+                <li class= "innodots"><i class="bi bi-arrow-up-right arrow"></i> If already carved, explore our list of existing courses</li>
+                <li class= "innodots"><i class="bi bi-arrow-up-right arrow"></i> Identify a course that aligns with your expertise </li>
+                <li class= "innodots"><i class="bi bi-arrow-up-right arrow"></i> Add a new topic </li>
+                <li class= "innodots"><i class="bi bi-arrow-up-right arrow"></i> Include a test or assesment </li>
+                <li class= "innodots"><i class="bi bi-arrow-up-right arrow"></i> Ensure your test is accessible to learners, including those with learning disabilities</li>
+            </ul>
 
-        <p>Being a teacher for a class of individuals with disabilities allows you to make a lasting impact on their lives. Your guidance and understanding contribute to creating an inclusive and supportive learning environment.</p>
-
-        <p>Providing learning assistance in ways that cater to particular disabilities showcases your dedication to ensuring that everyone has an equal opportunity to thrive. Your efforts contribute to a more inclusive and compassionate society.</p>
-
-        <h3>Thank you for being a Samaritan and making a difference!</h3>
-
-        
+        </div>   
     {% endif %}
     {% if user_in_disabled %}
         <h1>Welcome Our Special one</h1>
     {% endif %}
-</div>
 
 {% endblock %}

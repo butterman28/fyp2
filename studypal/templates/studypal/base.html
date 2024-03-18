@@ -30,6 +30,13 @@
                 color:{{request.user.userpreferences.font_color }};
                 word-spacing: {{ request.user.userpreferences.word_spacing }}px;
             }
+            svg-background {
+              background-image: url('{% static 'svg/elp.jpg' %}');
+              background-repeat: no-repeat;
+              background-size: cover;
+              /* Adjust as needed */
+              /* Add other styling properties as needed */
+          }
         </style>
     {% endif %}
     </head>
@@ -142,7 +149,7 @@
            
           </header>
           {% endif %}
-          <main role="main" class="container-fluid">
+          <main role="main" class="main">
             <div>
                     {% if messages %}
                         {% for message in messages %}

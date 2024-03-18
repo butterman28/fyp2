@@ -11,7 +11,86 @@ body {
     margin-bottom: 30px;
 }
 */
-.like {}
+.welcome {
+    margin-top: 30px;
+    background-color: #A8CEDA;
+    height: 165px;
+    width: 115.1%;
+    margin-left: -100px;
+    padding: 50px;
+    font-family: Outfit;
+}
+
+.paratext {
+    margin-top: 50px;
+
+}
+
+ul.no-dots {
+    padding: 0;
+    list-style-type: none;
+}
+
+li.innodots {
+    margin-bottom: 20px;
+
+}
+
+.arrow {
+    color: white;
+    font-size: 25px;
+}
+
+
+.divheader {
+    margin-top: 80px;
+}
+
+.sidediv {
+    background-color: #6AAEC3;
+    border-radius: 8px;
+    width: 408px;
+    height: 560px;
+    margin-left: 800px;
+    margin-top: -556px;
+    padding: 45px;
+}
+
+.text1 {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    height: 400px;
+    width: 50%;
+    margin-top: 250px;
+    margin-left: 10px;
+    margin-right: 500px;
+    box-shadow: 0 2px 6px rgb(0, 0, 0.1);
+}
+
+.creatcourse {
+    text-align: right;
+    font-family: inter;
+    margin-top: -50px;
+}
+
+.weltext {
+    font-family: Outfit;
+    font-weight: 200;
+    font-size: 45px;
+    line-height: 56.7px;
+}
+
+.move-svg {
+    margin-right: 0px;
+    left: 0px;
+    transform: scale(0.5);
+
+}
+
+.main {
+    margin: 0;
+}
 
 .obj {
     margin-top: -192px;
