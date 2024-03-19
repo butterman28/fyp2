@@ -1,21 +1,47 @@
-{% extends "studypal/base.html"%} {% load crispy_forms_tags %} {% block content %}
-<div class="content-section">
-  <form method="POST">
-    {% csrf_token %}
-    <fieldset class="form-group">
-      <legend class="border-bottom mb-4">Welcome To luxe</legend>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        {% load static %}
+        {% load crispy_forms_tags %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <!-- Add this to the head section of your HTML file -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <script src="{% static 'js/htmx.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+        <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-h1fy2VCJvM9ZgHr2JGj05gJf3tOdA7twP8/eNGTmBf5Lq6q6cI1QGZ1Id9aOaxY3" crossorigin="anonymous"></script>
+        <title>StudyPal</title>
+    </head>
+<body>
+<div class="samreg">
+  
+      <legend class="reglegend">Sign Up</legend>
+      <p class="regpara">Enter your details below to create an account and get started</p>
+      <form method="POST" class="form-group regform">
+        {% csrf_token %}
+        <fieldset class="form-group">
       {{ form|crispy }}
       {{ form1|crispy }}
     </fieldset>
-    <div class="form-group">
-      <button class="btn btn-outline-info" type="submit">Sign Up</button>
+    <div class="form-group divsignupbutton">
+      <button class="btn btn-outline-info signupbutton" type="submit">Sign Up</button>
     </div>
   </form>
-  <div class="border-top pt-3">
+  <div class="border-top pt-3 already">
     <small class="text-muted">
       Already Have An Account?
       <a class="ml-2" href="{%url 'login'%}">Sign In</a>
     </small>
   </div>
 </div>
-{% endblock content%}
+</body>
+</html>
