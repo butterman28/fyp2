@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.login {
+    margin-top: 68px;
+    margin-left: 147px;
+    margin-right: 900px;
+}
+
+.log {
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    font-size: 45px;
+    line-height: 67.5px;
+}
+
+.logtext {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 25.5px;
+    color: #5F5D5D;
+}
+
+.forgot {
+    font-family: 'Poppins', sans-serif;
+    margin-left: 285px;
+    font-size: 17px;
+    line-height: 25.5px;
+    color: #186D88;
+
+}
+
+.loginbutton {
+    font-family: 'Poppins', sans-serif;
+    background-color: #7AC0D7;
+    color: #FFFFFF;
+    width: 411px;
+    margin-top: 45px;
+    border-radius: 67px;
+    margin-left: 10px
+}
+
+.signupedu {
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    background-color: white;
+    border-color: black;
+    margin-top: 40px;
+    border-radius: 67px;
+    margin-left: 10px;
+    width: 411px;
+}
+
+.dont {
+    margin-left: 140px;
+    margin-top: 20px;
+    margin-bottom: -20px;
+}
+
+.nice {
+    width: 535px;
+    margin-top: -590px;
+    margin-left: 650px;
+    text-align: center;
+
+
+}
+
+.loginice {
+    font-weight: 300;
+    font-size: 31px;
+    line-height: 46.5px;
+    color: #777373;
+
+}
+
+.loginwelcome {
+    font-weight: 600px;
+    font-size: 68px;
+    line-height: 102px;
+    color: #51A6C1;
+    margin-top: -20px;
+}
+
+.signupstu {
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    width: 411px;
+    background-color: white;
+    border-color: black;
+    margin-top: 30px;
+    border-radius: 67px;
+    margin-left: 10px
+}

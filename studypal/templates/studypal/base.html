@@ -18,6 +18,7 @@
         <script src="{% static 'js/htmx.js' %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
         <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-h1fy2VCJvM9ZgHr2JGj05gJf3tOdA7twP8/eNGTmBf5Lq6q6cI1QGZ1Id9aOaxY3" crossorigin="anonymous"></script>
         <title>StudyPal</title>
         {% if request.user.is_authenticated %}
@@ -50,6 +51,14 @@
                   </a>
         
                   <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                      <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
+                      <form class="d-flex" action="{% url 'search_results' %}" method="get">
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2 " type="search" class="form-control"type="submit" name = "q" placeholder="Search..." aria-label="Search">
+                        <button type="submit" class ="btn btn-danger"> Submit</button>
+                      </form>
+                    </li>
                     <li>
                       <a href={% url "studypal-home"  %} class="nav-link text-white">
                         <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
@@ -134,15 +143,11 @@
             </div>
             <div class="px-3 py-2 border-bottom mb-3">
               <div class="container d-flex flex-wrap justify-content-center">
-                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" action="{% url 'search_results' %}" method="get">
-                  <input type="search" class="form-control"type="submit" name = "q" placeholder="Search..." aria-label="Search">
-                </form>
+                
                 {%  else %}
         
                 <div class="text-end">
-                     <a href="{% url 'login' %}" class="btn btn-light text-dark me-2">Login</a>
-                     <a href="{% url 'samregister' %}" class="btn btn-primary">Sign Up As Educator </a>
-                     <a href="{% url 'disregister' %}" class="btn btn-primary">Sign Up as a Student</a>
+                     
                 </div>
               </div>
             </div>
