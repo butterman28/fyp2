@@ -1,6 +1,6 @@
-{% extends "studypal/base.html" %}
-{% block content %}
-<hr>
+{% extends "studypal/coursebase.html" %}
+{% block coursecontent %}
+
 <div>
     {% if user_in_lecturers == True %}
         <a class="btn btn-danger" href="{% url 'course-create' %}">Create A Course</a>
@@ -35,7 +35,7 @@
     <p>If you have any questions or need assistance in creating accessible content or quizzes, feel free to contact us. Together, let's create an exceptional and inclusive learning environment for everyone!</p>
 </div>
 {% endif %}
-<hr>
+
     <div>
     {% for i in courses %}
     <h2>{{i.name}}</h2>

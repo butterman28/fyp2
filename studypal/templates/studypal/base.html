@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/samprofile.css' %}">
         <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-h1fy2VCJvM9ZgHr2JGj05gJf3tOdA7twP8/eNGTmBf5Lq6q6cI1QGZ1Id9aOaxY3" crossorigin="anonymous"></script>
         <title>StudyPal</title>
         {% if request.user.is_authenticated %}
@@ -83,6 +84,18 @@
                           Profile
                         </a>
                       </li>
+                      <li>
+                        <a href="{% url 'yourclasses' %}" class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                          Your Classes
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'lecturer-profile' %}"class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
+                          Lecturer Profile
+                        </a>
+                      </li>
                     {% endif %}
                     {% if user.disabilityprofile %}
                     <li>
@@ -91,12 +104,6 @@
                         Profile
                       </a>
                     </li>
-                    <li>
-                        <a href="{% url 'yourclasses' %}" class="nav-link text-white">
-                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
-                          Your Classes
-                        </a>
-                      </li>
                       <li>
                         <a href="{% url 'coursedashboard' %}" class="nav-link text-white">
                           <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
@@ -104,12 +111,6 @@
                         </a>
                       </li>
                     {% endif %}
-                    <li>
-                      <a href="{% url 'lecturer-profile' %}"class="nav-link text-white">
-                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
-                        Lecturer Profile
-                      </a>
-                    </li>
                     {% if teacherprofile.id %}
                     <li>
                       <a href="{% url 'teacher-profile' pk=teacherprofile.id %}" class="nav-link text-white">
