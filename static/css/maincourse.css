@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.mainc {
+    font-family: 'Poppins', sans-serif;
+    background-color: #FAF9F9;
+    border-radius: 21px;
+    padding: 15px;
+}
+
+ul.hd {
+    padding: 0;
+    list-style-type: none;
+}
+
+.divider {
+    width: 100%;
+    height: 30px;
+}
+
+.describe {
+    margin-top: 50px;
+    text-align: left;
+    width: 250px;
+}
+
+.enroll {
+    text-align: right;
+}
+
+.creatordiv {
+    text-align: center;
+    width: 250px;
+    margin-top: -200px;
+    margin-bottom: 200px;
+    margin-left: 400px;
+    height: 103px;
+    border-radius: 18px;
+    background-color: white;
+}
+
+.lessons {
+    margin-top: -65px;
+    margin-left: 65px;
+    font-weight: 600px;
+    font-size: 35px;
+    line-height: 42.36px;
+    color: #3DB0D6;
+}
+
+.space {
+    height: 40px;
+}
+
+.hours {
+    margin-top: -73px;
+    margin-left: 150px;
+    font-weight: 600px;
+    font-size: 35px;
+    line-height: 42.36px;
+    color: #3DB0D6;
+}
+
+.vr {
+    top: 100px;
+    border-left: 1px solid black;
+    height: 100px;
+    margin-left: 120px;
+}
+
+.divcreatorimage {
+    margin-top: 25px;
+    margin-left: -50px;
+    margin-right: 30px;
+    width: 55px;
+    height: 55px;
+
+}
+
+.duration {
+    background-color: white;
+    height: 167px;
+    width: 249px;
+    border-radius: 15px;
+    margin-top: -150px;
+    margin-left: 400px;
+}
+
+.lecname {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.lec {
+    margin-top: -35px;
+    margin-left: 65px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.atagc {
+    padding-top: 12px;
+    text-align: center;
+    color: white;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    margin-left: 250px;
+    margin-top: 10px;
+    background-color: #4291AB;
+    width: 118px;
+    height: 44px;
+    border-radius: 10px;
+}
+
+.headmainc {
+    font-family: 'Poppins', sans-serif;
+
+}
+
+.creatorimage {
+    width: 32px;
+    height: 32px;
+    margin-right: 5px;
+}
+
+li.hdli {
+    font-family: 'Poppins', sans-serif;
+    display: inline;
+    margin-right: 60px;
+}
+
+.gridheading {
+    text-align: left;
+    margin-top: 100px;
+    font-weight: 500px;
+}
+
+.grid-container {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    column-gap: 10px;
+    row-gap: 10px;
+    padding: 0px;
+}
+
+.grid-item {
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    width: 474px;
+    height: 326px;
+    padding: 50px;
+}
+
+.l1 {
+    margin-top: -25px;
+    margin-left: 45px;
+}
+
+.l2 {
+    margin-top: -25px;
+    margin-left: 150px;
+
+}

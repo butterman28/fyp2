@@ -17,6 +17,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <script src="{% static 'js/htmx.js' %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/coursebase.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/maincourse.css' %}">
         <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-h1fy2VCJvM9ZgHr2JGj05gJf3tOdA7twP8/eNGTmBf5Lq6q6cI1QGZ1Id9aOaxY3" crossorigin="anonymous"></script>
         <title>StudyPal</title>
         {% if request.user.is_authenticated %}
@@ -38,7 +39,6 @@
               }
             a:link {
                 text-decoration: none;
-                color: black;
               }
             
         </style>
@@ -46,17 +46,38 @@
     </head>
 <body>
     <head>
+        <div class="horizontalheading">
         <h2 class="cheading">Courses</h2>
-        <h2 class="nameheading">{{ user.username }}</h2>
         <form class="search" action="{% url 'search_results' %}" method="get">
             {% csrf_token %}
             <input class="form-control mr-sm-2 " type="search" class="form-control"type="submit" name = "q" placeholder="Search..." aria-label="Search">
             <button type="submit" class ="btn btn-danger sb"> Search</button>
-          </form>
+        </form>
+        <div class="details">
+            {% if user.samaritanprofile %}
+            <img
+                class="rounded-circle account-img couimage"
+                src="{{ user.samaritanprofile.image.url }}"
+            />
+            {%endif%}
+            {% if user.disabilityprofile %}
+                <img
+                    class="rounded-circle account-img couimage"
+                    src="{{ user.disabilityprofile.image.url }}"
+                />
+            {%endif%}
+          <p class="nameheading">{{ user.username }}</p>
+        </div>
+        </div>
         <div class="sidelist">
         <ul class="nodots">
             <li class= "no-dots"><a href="{% url 'courses' %}" class="atag"><i class="bi bi-mortarboard-fill"></i>  Courses</a></li>
-            <li class= "no-dots"><a href="{% url 'disprofile' %}" class="atag"><i class="bi bi-person-fill"></i>  My Account</a></li>
+            {% if user.samaritanprofile %}
+                <li class= "no-dots"><a href="{% url 'samprofile' %}" class="atag"><i class="bi bi-person-fill"></i>  My Account</a></li>
+            {%endif%}
+            {% if user.disabilityprofile %}
+                <li class= "no-dots"><a href="{% url 'disprofile' %}" class="atag"><i class="bi bi-person-fill"></i>  My Account</a></li>
+            {%endif%}
             <li class= "no-dots"><a href="{% url 'update_preferences' %}" class="atag"><i class="bi bi-gear"></i>  Preferences</a></li>
         </ul>
         </div>

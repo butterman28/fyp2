@@ -85,17 +85,11 @@
                         </a>
                       </li>
                       <li>
-                        <a href="{% url 'yourclasses' %}" class="nav-link text-white">
-                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
-                          Your Classes
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{% url 'lecturer-profile' %}"class="nav-link text-white">
-                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
-                          Lecturer Profile
-                        </a>
-                      </li>
+                      <a href="{% url 'lecturer-profile' %}"class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
+                        Lecturer Profile
+                      </a>
+                    </li>
                     {% endif %}
                     {% if user.disabilityprofile %}
                     <li>

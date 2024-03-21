@@ -1,6 +1,6 @@
-{% extends "studypal/coursebase.html" %}
-{% block coursecontent %}
-
+{% extends "studypal/maincourse.html" %}
+{% block maincontent %}
+<main class="mainc"> 
 <div>
     {% if user_in_lecturers == True %}
         <a class="btn btn-danger" href="{% url 'course-create' %}">Create A Course</a>
@@ -36,14 +36,18 @@
 </div>
 {% endif %}
 
-    <div>
-    {% for i in courses %}
-    <h2>{{i.name}}</h2>
-    <p> {{ i.description }} </p>
-    <p> Created By:{{ i.lecturer.lecturer.username }} </p>
-    <a class="btn btn-danger" href="{% url 'course-detail' i.id %}">Check It Out</a>
-    {% endfor %}
+    <div class="grid-container">
+        {% for i in courses %}
+        <div class="grid-item">
+            <h2 class="gridheading">{{i.name}}</h2>
+                <p> <img
+                    class="rounded-circle account-img creatorimage"
+                    src="{{ i.lecturer.lecturer.samaritanprofile.image.url }}"
+                />{{ i.lecturer.lecturer.username }} </p>
+                <a class="btn atagc" href="{% url 'course-detail' i.id %}">View Course</a>
+        </div>
+        {% endfor %}
     </div>
 </div>
-
+</main>
 {% endblock %}
