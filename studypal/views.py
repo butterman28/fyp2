@@ -595,18 +595,26 @@ class questiondetailview(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        topicsq = topicsquiz.objects.get(topic=self.object.topic)
+        topicsq = topicsquiz.objects.filter(topic=self.object.topic)
+        objans = objanssheet.objects.filter(
+            student=self.request.user,
+        )
         if topicobj.objects.filter(objquestion=self.object).exists():
             objquiz = topicobj.objects.get(objquestion=self.object)
             form = ansForm()
+            context["objquiz"] = objquiz
+            context["topicsquiz"] = topicsq
+            context["form"] = form
+            context["objans"] = objans
+            return context
         else:
             quiz = self.object
+            context["quiz"] = quiz
             form = theoryForm()
-        context["topicsquiz"] = topicsq
-        context["quiz"] = quiz
-        context["objquiz"] = objquiz
-        ontext["form"] = form
-        return context
+            context["topicsquiz"] = topicsq
+            context["form"] = form
+            context["objans"] = objans
+            return context
 
 
 class submitobj(View):
