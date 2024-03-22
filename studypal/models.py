@@ -40,6 +40,7 @@ class Courses(models.Model):
     name = models.CharField(max_length=5000, blank=False, null=False)
     description = models.CharField(max_length=5000, blank=False, null=False)
     lecturer = models.ForeignKey(Lecturers, on_delete=models.CASCADE)
+    coverimage = models.ImageField(default="default.jpg", upload_to="course_pics")
 
 
 class courseenrollment(models.Model):
@@ -57,9 +58,22 @@ class topics(models.Model):
     description = models.CharField(max_length=5000, blank=False, null=False)
     content = models.TextField()
     video_file = models.FileField(upload_to="videos")
+    coverimage = models.ImageField(default="default.jpg", upload_to="topic_pics")
 
     def get_absolute_url(self):
         return reverse("topic-detail", kwargs={"pk": self.pk})
+
+
+class section(models.Model):
+    topic = models.ForeignKey(topics, on_delete=models.CASCADE)
+    title = models.CharField(max_length=5000, blank=False, null=False)
+    description = models.CharField(max_length=5000, blank=False, null=False)
+    content = models.TextField()
+    video_file = models.FileField(upload_to="section_videos")
+    coverimage = models.ImageField(default="default.jpg", upload_to="section_pics")
+
+    def get_absolute_url(self):
+        return reverse("topic-detail", kwargs={"pk": self.topic.pk})
 
 
 class subtitles(models.Model):
@@ -73,6 +87,7 @@ class topicsquiz(models.Model):
     questiontype = models.CharField(
         max_length=5000, choices=questiontype, blank=False, null=False
     )
+    completed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("topic-detail", kwargs={"pk": self.topic.pk})

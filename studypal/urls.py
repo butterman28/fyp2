@@ -59,11 +59,18 @@ urlpatterns = [
         createcourse.as_view(template_name="studypal/course_form.html"),
         name="course-create",
     ),
+    path("topicdesc/<int:pk>/", topicdescription.as_view(), name="topic-description"),
     path(
         "create-topic/<int:course_id>/",
         createtopic.as_view(template_name="studypal/topics_form.html"),
         name="topic-create",
     ),
+    path(
+        "create-section/<int:topic_id>/",
+        createsection.as_view(template_name="studypal/section_form.html"),
+        name="section-create",
+    ),
+    path("quizpg/<int:pk>/", questiondetailview.as_view(), name="quizpg"),
     path(
         "enrollstudent/<int:course_id>/",
         enrollmentview.as_view(),

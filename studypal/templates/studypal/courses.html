@@ -1,5 +1,12 @@
 {% extends "studypal/maincourse.html" %}
 {% block maincontent %}
+<head class="headmainc">
+    <ul class = "hd">
+        <li class="hdli">All</li>
+        <li class="hdli">Ongoing</li>
+        <li class="hdli">Completed</li>
+    </ul>    
+</head>
 <main class="mainc"> 
 <div>
     {% if user_in_lecturers == True %}
@@ -39,6 +46,10 @@
     <div class="grid-container">
         {% for i in courses %}
         <div class="grid-item">
+            <img
+            class="coimg"
+            src="{{ i.coverimage.url }}"
+          />
             <h2 class="gridheading">{{i.name}}</h2>
                 <p> <img
                     class="rounded-circle account-img creatorimage"

@@ -302,7 +302,7 @@ class PostListView(ListView):
 
 class createcourse(LoginRequiredMixin, CreateView):
     model = Courses
-    fields = ["name", "description"]
+    fields = ["name", "description", "coverimage"]
 
     # def form_valid(self, form):
     #  form.instance.user = self.request.user
@@ -317,6 +317,20 @@ class createcourse(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     success_url = reverse_lazy("courses")
+
+
+class createsection(CreateView):
+    model = section
+    fields = ["title", "description", "content", "video_file", "coverimage"]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.topic_id = self.kwargs["topic_id"]
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        topic = get_object_or_404(topics, id=self.topic_id)
+        form.instance.topic = topic
+        return super().form_valid(form)
 
 
 class SearchResultsView(TemplateView):
@@ -398,7 +412,7 @@ class quiz_submitview(View):
 
 class createtopic(LoginRequiredMixin, CreateView):
     model = topics
-    fields = ["name", "description", "content", "video_file"]
+    fields = ["name", "description", "content", "video_file", "coverimage"]
 
     def dispatch(self, request, *args, **kwargs):
         self.course_id = self.kwargs["course_id"]
@@ -487,9 +501,56 @@ class topicview(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["subs"] = subtitles.objects.filter(topic=self.object)
+        context["section"] = section.objects.filter(topic=self.object)
         context["topicsquiz"] = topicsquiz.objects.filter(topic=self.object)
         context["topicinsub"] = subtitles.objects.filter(topic=self.object).exists()
         return context
+
+
+class topicdescription(DetailView):
+    model = topics
+    template_name = "studypal/topicdescription.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["subs"] = subtitles.objects.filter(topic=self.object)
+        context["section"] = section.objects.filter(topic=self.object)
+        context["topicsquiz"] = topicsquiz.objects.filter(topic=self.object)
+        context["topicinsub"] = subtitles.objects.filter(topic=self.object).exists()
+        return context
+
+
+class sectionview(DetailView):
+    model = section
+    template_name = "studypal/topic.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["subs"] = subtitles.objects.filter(topic=self.object)
+        context["section"] = section.objects.filter(topic=self.object)
+        context["topicsquiz"] = topicsquiz.objects.filter(topic=self.object)
+        context["topicinsub"] = subtitles.objects.filter(topic=self.object).exists()
+        return context
+
+
+class ongoing(ListView):
+    model = Courses
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        studentcourses = courseenrollment.objects.filter(student=self.request.user)
+        userobj = objanssheet.objects.filter(student=self.request.user)
+        usertheory = theoryanssheet.objects.filter(student=self.request.user)
+        completed = []
+        ongoing = []
+        for i in studentcourses:
+
+            i.course
+        # context[""] =
+        return context
+
+
+# class completed(View):
 
 
 class quizpageView(View):
@@ -524,6 +585,28 @@ class quizpageView(View):
             "theoryForm": theory,
         }
         return render(request, self.template_name, context)
+
+
+class questiondetailview(DetailView):
+    model = topicsquiz
+    template_name = "studypal/quizpg.html"
+    opform = ansForm()
+    theory = theoryForm()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        topicsq = topicsquiz.objects.get(topic=self.object.topic)
+        if topicobj.objects.filter(objquestion=self.object).exists():
+            objquiz = topicobj.objects.get(objquestion=self.object)
+            form = ansForm()
+        else:
+            quiz = self.object
+            form = theoryForm()
+        context["topicsquiz"] = topicsq
+        context["quiz"] = quiz
+        context["objquiz"] = objquiz
+        ontext["form"] = form
+        return context
 
 
 class submitobj(View):

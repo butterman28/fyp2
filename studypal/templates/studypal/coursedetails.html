@@ -1,21 +1,12 @@
 {% extends "studypal/maincourse.html" %}
 {% block maincontent %}
 <main class="mainc"> 
-<div>
+<div class="coursedes">
 <div class="describe">
 <h2>{{object.name}}</h2>
 <p>{{object.description }} </p>
 </div>
-<div class="enroll">
-{% if user.disabilityprofile %}
-{% if user_isenrolled == False %}
-<a class="btn btn-danger" href="{% url 'course-enroll' object.id %}">Enroll In Course</a>
-{%endif%}
-{% endif %}
-{% if user_isenrolled == True %}
-<h3 class="btn btn-danger">Hurray,Your already enrolled , A Teacher will get across to you soon </h3>
-{%endif%}
-</div>
+
 <div class ="creatordiv">
     <p class="lecname"> <img
         class="rounded-circle account-img divcreatorimage"
@@ -31,32 +22,63 @@
     <p class="hours">52</p>
     <p class="l2">Hours</p>
 </div>
+    <img
+        class="cimg"
+        src="{{ object.coverimage.url }}"
+      />
+    {% if user.disabilityprofile %}
+    {% if user_isenrolled == False %}
+    <a class="btn enroll" href="{% url 'course-enroll' object.id %}"><p class="enrtext">Enroll</p></a>
+    {%endif%}
+    {% endif %}
+    {% if user_isenrolled == True %}
+    <a class="btn enrolled" href="{% url 'course-enroll' object.id %}"><p class="enrtextp">Enrolled <i class="bi bi-check2 fs-3 passm enrtextp"></i></p></a>
+    {%endif%}
+</main>
+<div class="divider">
+
+</div>
 {% if object.lecturer.lecturer == request.user %}
+<main class="mainc">   
+   
 <a class="btn btn-danger" href="{% url 'topic-create' object.id %}">Add a Topic</a>
 <legend>Students Enrolled</legend>
 <hr>
 {% for  student in enrolled  %}
     <h6>{{student.student.username}}</h6>
 {%endfor%}
-<hr>
-{% endif %}
-</div>
 </main>
+{% endif %}
 <div class="divider">
 
 </div>
-<main class="mainc">    
-    <div class="grid-container">
-        {% for topic in topics  %}
-        <div class=class="grid-item">
-        <h6> {{topic.name}} </h6> 
-        <h6> {{topic.course.lecturer.lecturer}} </h6> 
+<main class="mainc">  
+    <div class="another-grid-container">
         {% if topic.course.lecturer.lecturer == request.user %}
-        <a class="btn btn-danger" href="{% url 'topic-detail' topic.id %}">Update Topic</a>
-        {%endif%} 
-        <a class="btn btn-danger" href="{% url 'topic-view' topic.id %}">View Topic</a>
+        {% for topic in topics  %}
+        <a class="btn" href="{% url 'topic-detail' topic.id %}">
+        <div class="another-grid-item">
+            <img
+                class="timg"
+                src="{{ topic.coverimage.url }}"
+            />
+            <p class="tname"> {{topic.name}} </p>  
         </div>
+        </a>
         {% endfor %}
-        </div>
+        {% else %}
+        {% for topic in topics  %}
+        <a class="btn" href="{% url 'topic-view' topic.id %}">
+            <div class="another-grid-item">
+                <img
+                    class="timg"
+                    src="{{ topic.coverimage.url }}"
+                />
+                <p class="tname"> {{topic.name}} </p>  
+            </div>
+            </a>
+        {%endfor%}
+        {%endif%} 
+    </div>
 </main>
 {%endblock%}

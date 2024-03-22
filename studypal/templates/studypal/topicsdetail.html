@@ -4,6 +4,7 @@
 
 {%  if userislecturer == True %}
 <div>
+    <a class="btn btn-danger" href="{% url 'section-create' object.id %}">Create a Section</a>
     <h2>Edit Topic Details </h2>
     <form method="post"  enctype="multipart/form-data" action="{% url 'topicupdate' object.id  %}">
         {% csrf_token %}

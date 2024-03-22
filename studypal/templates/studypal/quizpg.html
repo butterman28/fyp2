@@ -1,0 +1,15 @@
+{% extends "studypal/quizbase.html" %}
+{% load crispy_forms_tags %}
+{% block quizcontent %}
+<h2>{{quiz.question}}</h2>
+{%if object.question == "objective"%}
+<h2>{{objquiz.question}}</h2>
+{%endif%}
+<form method="post" action="{% url 'submit-theory' l.id %}">
+    {% csrf_token %}
+    {{ form|crispy}}
+    <button type="submit">Submit</button>
+</form>
+
+
+{%endblock%}

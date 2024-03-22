@@ -1,0 +1,104 @@
+.topicvid {
+    border-radius: 32px;
+    width: 767px;
+    height: 393px;
+}
+
+.section-grid-container {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto;
+    justify-content: space-evenly;
+    grid-template-rows: auto auto auto;
+    column-gap: 20px;
+    row-gap: 20px;
+    padding: 0px;
+}
+
+.section-grid-item {
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 22px;
+    width: 300px;
+    height: 223px;
+    padding: 0px;
+}
+
+.timgt {
+    width: 60px;
+    height: 61px;
+}
+
+.tcd {
+    margin-top: 20px;
+    margin-left: 80px;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 36px
+}
+
+.objd {
+    margin-top: -70px;
+    margin-left: 80px;
+    line-height: 6px;
+}
+
+.adjust {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.TopicDescription {
+    text-decoration: underline;
+    font-weight: 600px;
+    font-size: 18px;
+    line-height: 27px;
+
+}
+
+.upnext {
+    margin-top: -450px;
+    margin-left: 830px;
+    width: 280px;
+    height: 400px;
+    border-radius: 16px;
+}
+
+.upp {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 19.5px;
+}
+
+.extras {
+    margin-top: 100px;
+    width: 770px;
+
+}
+
+.upn {
+    font-weight: 500;
+    font-size: 38px;
+    line-height: 57px;
+    margin-bottom: 30px;
+}
+
+.takeqb {
+    margin-left: 20px;
+    text-align: center;
+    width: 220px;
+    height: 60px;
+    border-radius: 30px;
+    background-color: #5AB9D8;
+    color: white;
+    padding-top: 15px;
+
+}
+
+.sectionfx {
+    margin-top: -280px;
+    margin-left: 790px;
+    width: 300px;
+
+}
