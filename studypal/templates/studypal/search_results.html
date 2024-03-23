@@ -1,0 +1,15 @@
+{% extends "studypal/maincourse.html" %}
+{% block maincontent %}
+{% for res in results_b  %}
+        <a class="btn" href="{% url 'course-detail' res.id %}">
+            <div class="another-grid-item">
+                <img
+                    class="timg"
+                    src="{{ res.coverimage.url }}"
+                />
+                <p class="tname"> {{res.name}} </p>  
+            </div>
+            </a>
+{%endfor%}
+
+{%endblock%}

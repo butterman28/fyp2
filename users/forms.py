@@ -32,9 +32,7 @@ class UsersamProfileForm(forms.ModelForm):
 
 class UserdisProfileForm(forms.ModelForm):
     disability_CHOICES = [
-        ("vpd", "VPD"),
         ("dyslexia", "Dyslexia"),
-        ("adhd", "ADHD"),
     ]
 
     # image = forms.ImageField()

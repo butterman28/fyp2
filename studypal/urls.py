@@ -4,6 +4,7 @@ from . import views
 from djmoney.models.fields import *
 
 urlpatterns = [
+    path("topics/<int:pk>/delete/", deletetopic.as_view(), name="topic-delete"),
     # listviews
     path(
         "update-preferences/",

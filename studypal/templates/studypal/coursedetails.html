@@ -54,17 +54,17 @@
 </div>
 <main class="mainc">  
     <div class="another-grid-container">
-        {% if topic.course.lecturer.lecturer == request.user %}
+        {% if object.lecturer.lecturer == request.user %}
         {% for topic in topics  %}
-        <a class="btn" href="{% url 'topic-detail' topic.id %}">
         <div class="another-grid-item">
+        <a class="btn" href="{% url 'topic-detail' topic.id %}">
             <img
                 class="timg"
                 src="{{ topic.coverimage.url }}"
             />
             <p class="tname"> {{topic.name}} </p>  
-        </div>
         </a>
+        </div>
         {% endfor %}
         {% else %}
         {% for topic in topics  %}

@@ -250,6 +250,7 @@ class courseListView(ListView):
         context = super(courseListView, self).get_context_data(**kwargs)
         # context["disabled"] = disabilityProfile.objects.all()
         context["lecturers"] = Lecturers.objects.all()
+
         # context["artlikes"] = artlike.objects.all()
         # context["subform"] = SubscribeForm()
         for i in Courses.objects.all():
@@ -342,24 +343,19 @@ class SearchResultsView(TemplateView):
         query = self.request.GET.get("q", "")
 
         results_a = Lecturers.objects.filter(
-            reduce(
-                lambda x, y: x | y,
-                (
-                    Q(**{f.name + "__icontains": query})
-                    for f in Lecturers._meta.fields
-                    if "proofofqualific" not in f.name
-                ),
-            )
+            Q(qualifications__icontains=query)
+            | Q(
+                lecturer__username__icontains=query
+            )  # Assuming you want to search by lecturer's username
         )
+
         results_b = Courses.objects.filter(
-            reduce(
-                lambda x, y: x | y,
-                (
-                    Q(**{f.name + "__icontains": query})
-                    for f in Courses._meta.fields
-                    if "lecturer" not in f.name
-                ),
-            )
+            Q(name__icontains=query)
+            | Q(description__icontains=query)
+            | Q(
+                lecturer__qualifications__icontains=query
+            )  # Assuming you want to search by lecturer's qualifications
+            # Add additional fields as needed
         )
         context["results_a"] = results_a
         context["results_b"] = results_b
@@ -540,7 +536,7 @@ class ongoing(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         studentcourses = courseenrollment.objects.filter(student=self.request.user)
-        
+
         userobj = objanssheet.objects.filter(student=self.request.user)
         usertheory = theoryanssheet.objects.filter(student=self.request.user)
         completed = []
@@ -740,6 +736,20 @@ class submitheory(View):
             return redirect("topic-view", pk=question.topic.id + 1)
         else:
             return redirect("quizpg", pk=getid)
+
+
+class deletetopic(DeleteView):
+    model = topics
+
+    def test_func(self):
+        topic = self.get_object()
+        if self.request.user == topic.course.lecturer.lecturer:
+            return True
+        return False
+
+    def get_success_url(self):
+        # Assuming your_success_url_name expects a primary key as a parameter
+        return reverse_lazy("course-detail", kwargs={"pk": self.object.course.id})
 
 
 class topicdetailview(DetailView, UserPassesTestMixin):

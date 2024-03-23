@@ -4,6 +4,12 @@
 
 {%  if userislecturer == True %}
 <div>
+    <button class="btn btn-danger" >
+    <a  href= "{% url 'topic-delete' object.id %}">Delete</a>
+    </button>
+    </div>
+    <hr>
+<div>
     <a class="btn btn-danger" href="{% url 'section-create' object.id %}">Create a Section</a>
     <h2>Edit Topic Details </h2>
     <form method="post"  enctype="multipart/form-data" action="{% url 'topicupdate' object.id  %}">
