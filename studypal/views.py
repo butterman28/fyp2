@@ -73,15 +73,16 @@ class UserPreferencesForm(forms.Form):
 
 class ansForm(forms.Form):
     answerfilled = forms.ChoiceField(
-        label="Choose Only One of the below",
+        label="",
         choices=optype,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={"class": "radio-spacing"}),
     )
 
 
 class theoryForm(forms.Form):
     ans = forms.CharField(
         label="Enter Your theory Answer answer is not Guaranteed like it obj counterpart ",
+        widget=forms.Textarea(attrs={"rows": 8, "cols": 20}),
         max_length=30,
     )
 
@@ -564,6 +565,11 @@ class quizpageView(View):
         objans = objanssheet.objects.filter(
             student=request.user,
         )
+        j = 0
+        qnos = {}
+        for i in quizq:
+            j = j + 1
+            qnos[j] = i.id
         for i in quizq:
             if i.questiontype == "objective":
                 objoptions.append(
@@ -583,6 +589,7 @@ class quizpageView(View):
             "objans": objans,
             "opform": opform,
             "theoryForm": theory,
+            "questionnumbers": qnos,
         }
         return render(request, self.template_name, context)
 
@@ -599,17 +606,26 @@ class questiondetailview(DetailView):
         objans = objanssheet.objects.filter(
             student=self.request.user,
         )
+        j = 0
+        qnos = {}
+        for i in topicsq:
+            j = j + 1
+            qnos[j] = i.id
+        print(len(qnos))
+        print(qnos)
         if topicobj.objects.filter(objquestion=self.object).exists():
             objquiz = topicobj.objects.get(objquestion=self.object)
             form = ansForm()
             context["objquiz"] = objquiz
             context["topicsquiz"] = topicsq
+            context["questionnumbers"] = qnos
             context["form"] = form
             context["objans"] = objans
             return context
         else:
             quiz = self.object
             context["quiz"] = quiz
+            context["questionnumbers"] = qnos
             form = theoryForm()
             context["topicsquiz"] = topicsq
             context["form"] = form
@@ -632,7 +648,24 @@ class submitobj(View):
         ).first()
         questioncheck = topicobj.objects.filter(id=obj_id).first()
         form = ansForm(request.POST)
-
+        topicsq = topicsquiz.objects.filter(topic=question.objquestion.topic)
+        j = 0
+        qnos = {}
+        for i in topicsq:
+            j = j + 1
+            qnos[j] = i.id
+        newid = 0
+        for key, value in qnos.items():
+            # Check if the current value matches the target value
+            if value == question.objquestion.id:
+                # Return the key if found
+                newid = key
+        x = newid + 1
+        getid = 0
+        if x > len(qnos):
+            getid = qnos[newid]
+        else:
+            getid = qnos[x]
         if form.is_valid():
             ans = form.cleaned_data["answerfilled"]
             correctans = questioncheck.answer
@@ -652,8 +685,11 @@ class submitobj(View):
             # redirect_url += f"?correct={correct}"
 
         # return redirect(redirect_url)
-
-        return redirect("quizpage", topicid=question.objquestion.topic.id)
+        if x > len(qnos):
+            return redirect("topic-view", pk=question.topic.id + 1)
+        else:
+            return redirect("quizpg", pk=getid)
+        # return redirect("quizpg", pk=getid)
 
 
 class submitheory(View):
@@ -664,6 +700,24 @@ class submitheory(View):
             student=request.user,
         ).first()
         form = theoryForm(request.POST)
+        topicsq = topicsquiz.objects.filter(topic=question.topic)
+        j = 0
+        qnos = {}
+        for i in topicsq:
+            j = j + 1
+            qnos[j] = i.id
+        newid = 0
+        for key, value in qnos.items():
+            # Check if the current value matches the target value
+            if value == question.id:
+                # Return the key if found
+                newid = key
+        x = newid + 1
+        getid = 0
+        if x > len(qnos):
+            getid = qnos[newid]
+        else:
+            getid = qnos[x]
         if form.is_valid():
             ans = form.cleaned_data["ans"]
             # correctans = questioncheck.answer
@@ -677,8 +731,11 @@ class submitheory(View):
             theoryans.answer = ans
             theoryans.save()
             messages.success(request, "submission Updated!")
-
-        return redirect("quizpage", topicid=question.topic.id)
+        if x > len(qnos):
+            # question.topic.comp
+            return redirect("topic-view", pk=question.topic.id + 1)
+        else:
+            return redirect("quizpg", pk=getid)
 
 
 class topicdetailview(DetailView, UserPassesTestMixin):

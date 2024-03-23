@@ -1,59 +1,5 @@
 {% extends "studypal/quizbase.html" %}
 {% load crispy_forms_tags %}
 {% block quizcontent %}
-<h3>Objective Questions</h3>
-{% for i in objoptions  %}
-{% for q in i  %}
-
-<h6>Answer is {{q.answerfilled}}</h6>
-{%if q.objquestion.questiontype == "objective"%}
-
-<h5> {{q.objquestion.question}}</h5>
-<p>
-    {{q.op1}}
-</p>
-<p>
-    {{q.op2}}
-</p>
-<p>
-    {{q.op3}}
-</p>
-<p>
-    {{q.op4}}
-</p>
-<div class= "obj">
-<form method="post" action="{% url 'submit-answer' q.id %}">
-    {% csrf_token %}
-    {{ opform|crispy}}
-    <button type="submit">Submit</button>
-    {% for j in objans  %}
-    {%if q.answer == j.answerfilled and q.id == j.question.id  %}
-        <a class="btn btn-success" href="#">Correct</a>
-    {%endif%}
-    {%if q.answer != j.answerfilled and q.id == j.question.id%}
-        <a class="btn btn-danger" href="#">Wrong</a>
-        <a class="btn btn-success" href="#">Corret Answer is {{q.answer}}</a>
-
-    {%endif%}
-    {%endfor%}
-</form>
-</div>
-{%endif%}
-{%if q.objquestion.questiontype == "theory"%}
-<h5> {{q.objquestion.question}}</h5>
-{%endif%}
-{%endfor%}
-{%endfor%}
-<h3>Theory Questions </h3>
-{% for l in topicsquiz %}
-{%if l.questiontype == "theory"%}
-<h5> {{l.question}}</h5>
-<form method="post" action="{% url 'submit-theory' l.id %}">
-    {% csrf_token %}
-    {{ theoryForm|crispy}}
-    <button type="submit">Submit</button>
-</form>
-{%endif%}
-{%endfor%}
 
 {%endblock%}

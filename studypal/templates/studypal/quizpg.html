@@ -1,19 +1,25 @@
 {% extends "studypal/quizbase.html" %}
 {% load crispy_forms_tags %}
 {% block quizcontent %}
+{% for key,value in questionnumbers.items %}
+{%if value == object.id %}
+    <h2>Question {{key}}</h2>
+{%endif%}
+{%endfor%}
 {%if object.questiontype == "objective" %}
-<h3>Objective Questions</h3>
-<h2>{{objquiz.objquestion.question}}</h2>
-<p>
+<p class="commence">Commence your Assessment Test Experience<p>
+<p class="prac">Practice Quiz</p>
+<p class="question">{{objquiz.objquestion.question}}</p>
+<p class="objq">
     {{objquiz.op1}}
 </p>
-<p>
+<p class="objq">
     {{objquiz.op2}}
 </p>
-<p>
+<p class="objq">
     {{objquiz.op3}}
 </p>
-<p>
+<p class="objq">
     {{objquiz.op4}}
 </p>
 <form method="post" action="{% url 'submit-answer' objquiz.id %}">
@@ -26,18 +32,19 @@
     {%endif%}
     {%if objquiz.answer != j.answerfilled and objquiz.id == j.question.id%}
         <a class="btn btn-danger" href="#">Wrong</a>
-        <a class="btn btn-success" href="#">Corret Answer is {{q.answer}}</a>
+        <a class="btn btn-success" href="#">Corret Answer is {{objquiz.answer}}</a>
 
     {%endif%}
     {%endfor%}
 </form>
 {%endif%}
+
 {%if object.questiontype == "theory" %}
 <h2>{{quiz.question}}</h2>
 <form method="post" action="{% url 'submit-theory' object.id %}">
     {% csrf_token %}
     {{ form|crispy}}
-    <button type="submit">Submit</button>
+    <button type="submit" class="sub">Submit</button>
 </form>
 {%endif%}
 

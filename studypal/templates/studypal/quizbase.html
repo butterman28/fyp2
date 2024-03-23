@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica">
         <!-- Custom CSS -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/quizpg.css' %}">
         <script src="{% static 'js/htmx.js' %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
         
@@ -52,12 +53,12 @@
         <h2>Take A Quiz</h2>
         <p class ="please">Please answer the following questions to the best of your ability</p>
         <ol class="nodot">
-            {% for i in topicsquiz  %}
-                <li>
-                <a class="btn" href={% url 'quizpg' i.id %}>
-                    <i class="bi bi-record-circle"></i>    Question {{i.question}}
-                </a>
-            </li>
+            {% for key,value in questionnumbers.items %}
+                <li class"innodot">
+                    <a class="btn" href={% url 'quizpg' value %}>
+                        <i class="bi bi-record-circle"></i>Question {{key}}
+                    </a>
+                </li>
             {%endfor%}
         </ol>
     </div>

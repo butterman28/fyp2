@@ -59,6 +59,7 @@ class topics(models.Model):
     content = models.TextField()
     video_file = models.FileField(upload_to="videos")
     coverimage = models.ImageField(default="default.jpg", upload_to="topic_pics")
+    completed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("topic-detail", kwargs={"pk": self.pk})
