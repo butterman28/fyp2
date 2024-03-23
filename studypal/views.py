@@ -540,6 +540,7 @@ class ongoing(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         studentcourses = courseenrollment.objects.filter(student=self.request.user)
+        
         userobj = objanssheet.objects.filter(student=self.request.user)
         usertheory = theoryanssheet.objects.filter(student=self.request.user)
         completed = []
@@ -686,6 +687,8 @@ class submitobj(View):
 
         # return redirect(redirect_url)
         if x > len(qnos):
+            question.topic.completed = True
+            question.save()
             return redirect("topic-view", pk=question.topic.id + 1)
         else:
             return redirect("quizpg", pk=getid)
@@ -732,7 +735,8 @@ class submitheory(View):
             theoryans.save()
             messages.success(request, "submission Updated!")
         if x > len(qnos):
-            # question.topic.comp
+            question.topic.completed = True
+            question.save()
             return redirect("topic-view", pk=question.topic.id + 1)
         else:
             return redirect("quizpg", pk=getid)
