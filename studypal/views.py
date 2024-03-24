@@ -641,11 +641,6 @@ class questiondetailview(DetailView):
                 x = i
                 x = x + 1
                 nexttopic = topicids[x]
-        print(nexttopic)
-        print(topicids)
-        print(nexttopic)
-        print(len(qnos))
-        print(qnos)
         # topicobj.objects.filter(objquestion=self.object).exists()
         objquiz = topicobj.objects.get(objquestion=self.object)
         form = ansForm()
@@ -676,12 +671,18 @@ class submitobj(View):
             question=question,
             student=request.user,
         ).first()
+        sptopic = topics.objects.filter(course=question.objquestion.topic.course)
         questioncheck = topicobj.objects.filter(id=obj_id).first()
         form = ansForm(request.POST)
         topicsq = topicsquiz.objects.filter(topic=question.objquestion.topic)
         j = 0
+        m = 0
+        presentkey = 0
         qnos = {}
         topicids = {}
+        for k in sptopic:
+            m = m + 1
+            topicids[m] = k.id
         for i in topicsq:
             if i.questiontype == "objective":
                 j = j + 1
@@ -692,6 +693,10 @@ class submitobj(View):
             if value == question.objquestion.id:
                 # Return the key if found
                 newid = key
+        for key, value in topicids.items():
+            if value == question.objquestion.topic.id:
+                presentkey = key
+        print(topicids)
         x = newid + 1
         getid = 0
         if x > len(qnos):
@@ -718,15 +723,18 @@ class submitobj(View):
 
         # return redirect(redirect_url)
         if x > len(qnos):
-            print(x)
-            if Completed.objects.filter(
-                student=self.request.user, course=question.objquestion.topic.course
-            ).exists():
-                pass
-            else:
-                Completed.objects.create(
+            if x > len(qnos) and presentkey == len(topicids):
+                print(x)
+                if Completed.objects.filter(
                     student=self.request.user, course=question.objquestion.topic.course
-                )
+                ).exists():
+                    print(presentkey)
+                    pass
+                else:
+                    Completed.objects.create(
+                        student=self.request.user,
+                        course=question.objquestion.topic.course,
+                    )
             return redirect("quizpg", pk=getid)
         else:
             return redirect("quizpg", pk=getid)
