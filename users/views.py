@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from .models import *
+from studypal.models import *
 
 
 def samregister(request):
@@ -12,7 +13,9 @@ def samregister(request):
         form1 = UsersamProfileForm(request.POST)
         if form.is_valid() and form1.is_valid():
             user = form.save()
+            lecturers = Lecturers.objects.filter(lecturer=user).exists()
             try:
+
                 user_profile = samaritanProfile.objects.get(user=user)
                 # If a profile already exists, update it
                 user_profile.image = form1.cleaned_data["image"]
@@ -27,6 +30,10 @@ def samregister(request):
                 user_profile = form1.save(commit=False)
                 user_profile.user = user
                 user_profile.save()
+            if lecturers == True:
+                pass
+            else:
+                Lecturers.objects.create(lecturer=user)
             username = form.cleaned_data.get("username")
             messages.success(request, f"Account Created for {username}!")
             return redirect("login")

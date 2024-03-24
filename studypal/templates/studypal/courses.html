@@ -11,7 +11,6 @@
 <div>
     {% if user_in_lecturers == True %}
         <a class="btn btn-danger" href="{% url 'course-create' %}">Create A Course</a>
-    
 <hr>
 <div>
     <h1>Welcome, Inspiring Educators!</h1>
@@ -42,7 +41,26 @@
     <p>If you have any questions or need assistance in creating accessible content or quizzes, feel free to contact us. Together, let's create an exceptional and inclusive learning environment for everyone!</p>
 </div>
 {% endif %}
-
+{% if user.samaritanprofile %}
+    <div class="grid-container">
+        {% for i in courses %}
+        {% if i.lecturer.lecturer == user %}
+        <div class="grid-item">
+            <img
+            class="coimg"
+            src="{{ i.coverimage.url }}"
+          />
+            <h2 class="gridheading">{{i.name}}</h2>
+                <p> <img
+                    class="rounded-circle account-img creatorimage"
+                    src="{{ i.lecturer.lecturer.samaritanprofile.image.url }}"
+                />{{ i.lecturer.lecturer.username }} </p>
+                <a class="btn atagc" href="{% url 'course-detail' i.id %}">View Course</a>
+        </div>
+        {%endif%}
+        {% endfor %}
+{%endif%}
+{% if user.disabilityprofile %}
     <div class="grid-container">
         {% for i in courses %}
         <div class="grid-item">
@@ -58,6 +76,8 @@
                 <a class="btn atagc" href="{% url 'course-detail' i.id %}">View Course</a>
         </div>
         {% endfor %}
+{%endif%}
+
     </div>
 </div>
 </main>

@@ -28,12 +28,6 @@ class UserPreferences(models.Model):
 
 class Lecturers(models.Model):
     lecturer = models.ForeignKey(User, on_delete=models.CASCADE)
-    qualifications = models.CharField(max_length=5000, blank=False, null=False)
-    proofofqualific = models.ImageField(
-        verbose_name="Proof Of Qualifications",
-        default="default.jpg",
-        upload_to="qualifications",
-    )
 
 
 class Courses(models.Model):

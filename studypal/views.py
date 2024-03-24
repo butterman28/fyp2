@@ -250,7 +250,9 @@ class courseListView(ListView):
         context = super(courseListView, self).get_context_data(**kwargs)
         # context["disabled"] = disabilityProfile.objects.all()
         context["lecturers"] = Lecturers.objects.all()
-
+        context["coursescreated"] = Courses.objects.filter(
+            lecturer__lecturer=self.request.user
+        )
         # context["artlikes"] = artlike.objects.all()
         # context["subform"] = SubscribeForm()
         for i in Courses.objects.all():
