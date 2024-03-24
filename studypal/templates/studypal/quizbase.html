@@ -23,6 +23,7 @@
         <title>StudyPal</title>
         {% if request.user.is_authenticated %}
         <link rel="stylesheet" href="{% static 'css/' %}{{ request.user.userpreferences.color_theme }}.css">   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <style>
             body {
                 font-size: {{ request.user.userpreferences.font_size }}px;
@@ -65,5 +66,23 @@
     <main class="quizmain">
     {% block quizcontent %}{% endblock %}
     </main>
+    <script>
+        setTimeout(() => {
+            var correctbtn = document.getElementById('correct-btn');
+            //  removes element from DOM
+            correctbtn.style.display = 'none';
+            //hides element (still takes up space on page)
+            // box.style.visibility = 'hidden';
+          }, 5000);
+    </script>
+    <script>
+        setTimeout(() => {
+            var wrongbtn = document.getElementById('wrong-btn');
+            //  removes element from DOM
+            wrongbtn.style.display = 'none';        
+            //hides element (still takes up spae on page)
+            // box.style.visibility = 'hidden';
+          }, 5000);
+    </script>
 </body>
 </html>

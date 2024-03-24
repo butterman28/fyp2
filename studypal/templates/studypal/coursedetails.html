@@ -67,6 +67,9 @@
         </div>
         {% endfor %}
         {% else %}
+        {%if user_isenrolled == False %}
+        <h2> Click The Enroll Button To View More</h2>
+        {%else%}
         {% for topic in topics  %}
         <a class="btn" href="{% url 'topic-view' topic.id %}">
             <div class="another-grid-item">
@@ -78,6 +81,7 @@
             </div>
             </a>
         {%endfor%}
+        {%endif%} 
         {%endif%} 
     </div>
 </main>

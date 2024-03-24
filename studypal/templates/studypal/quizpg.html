@@ -25,28 +25,27 @@
 <form method="post" action="{% url 'submit-answer' objquiz.id %}">
     {% csrf_token %}
     {{ form|crispy}}
-    <button type="submit">Submit</button>
+    <button type="submit"class="subobj">Submit</button>
     {% for j in objans  %}
     {%if objquiz.answer == j.answerfilled and objquiz.id == j.question.id  %}
-        <a class="btn btn-success" href="#">Correct</a>
+        <a id="correct-btn" class="btn btn-success" href="#">Correct</a>
     {%endif%}
-    {%if objquiz.answer != j.answerfilled and objquiz.id == j.question.id%}
-        <a class="btn btn-danger" href="#">Wrong</a>
-        <a class="btn btn-success" href="#">Corret Answer is {{objquiz.answer}}</a>
-
-    {%endif%}
+    {% if objquiz.answer != j.answerfilled and objquiz.id == j.question.id %}
+    <div id="box" class="feedback-buttons">
+        <a id="wrong-btn" class="btn btn-danger" href="#">Wrong</a>
+        <a id="wrong-btn" class="btn btn-success" href="#">Correct Answer is {{ objquiz.answer }}</a>
+    </div>
+    {% endif %}
     {%endfor%}
 </form>
 {%endif%}
+{% for key,value in questionnumbers.items %}
+{% if key == questionnumbers|length and value == object.id  %}
+<a class="btn btn-success" href="{% url 'topic-view' next  %}">Proceed To next topic</a>
+{% endif %}
+{%endfor%}
 
-{%if object.questiontype == "theory" %}
-<h2>{{quiz.question}}</h2>
-<form method="post" action="{% url 'submit-theory' object.id %}">
-    {% csrf_token %}
-    {{ form|crispy}}
-    <button type="submit" class="sub">Submit</button>
-</form>
-{%endif%}
+
 
 
 {%endblock%}

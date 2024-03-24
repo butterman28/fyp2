@@ -3,7 +3,7 @@
 {% for i in userc %}
 <hr>
 <ul>
-<li><a class="btn btn-danger" href="#">{{i.course.name}}</a></li>
+<li><a class="btn btn-danger" href="{% url 'course-detail' i.course.id %}">{{i.course.name}}</a></li>
 </ul>
 
 {% endfor %}

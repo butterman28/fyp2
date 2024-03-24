@@ -563,10 +563,12 @@ class quizpageView(View):
             student=request.user,
         )
         j = 0
+        k = 0
         qnos = {}
         for i in quizq:
-            j = j + 1
-            qnos[j] = i.id
+            if i.questiontype == "objective":
+                j = j + 1
+                qnos[j] = i.id
         for i in quizq:
             if i.questiontype == "objective":
                 objoptions.append(
@@ -585,6 +587,7 @@ class quizpageView(View):
             "objoptions": objoptions,
             "objans": objans,
             "opform": opform,
+            "len": len(qnos),
             "theoryForm": theory,
             "questionnumbers": qnos,
         }
@@ -600,34 +603,45 @@ class questiondetailview(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         topicsq = topicsquiz.objects.filter(topic=self.object.topic)
+        courses = Courses.objects.filter(id=self.object.topic.course.id)
+        sptopic = topics.objects.filter(course=self.object.topic.course)
         objans = objanssheet.objects.filter(
             student=self.request.user,
         )
         j = 0
+        m = 0
+        x = 0
+        nexttopic = 0
         qnos = {}
+        topicids = {}
+        for k in sptopic:
+            m = m + 1
+            topicids[m] = k.id
         for i in topicsq:
-            j = j + 1
-            qnos[j] = i.id
+            if i.questiontype == "objective":
+                j = j + 1
+                qnos[j] = i.id
+        for i in topicids:
+            if i == self.object.topic.id:
+                x = i
+                x = x + 1
+                nexttopic = topicids[x]
+        print(topicids)
+        print(nexttopic)
         print(len(qnos))
         print(qnos)
-        if topicobj.objects.filter(objquestion=self.object).exists():
-            objquiz = topicobj.objects.get(objquestion=self.object)
-            form = ansForm()
-            context["objquiz"] = objquiz
-            context["topicsquiz"] = topicsq
-            context["questionnumbers"] = qnos
-            context["form"] = form
-            context["objans"] = objans
-            return context
-        else:
-            quiz = self.object
-            context["quiz"] = quiz
-            context["questionnumbers"] = qnos
-            form = theoryForm()
-            context["topicsquiz"] = topicsq
-            context["form"] = form
-            context["objans"] = objans
-            return context
+        topicobj.objects.filter(objquestion=self.object).exists()
+        objquiz = topicobj.objects.get(objquestion=self.object)
+        form = ansForm()
+        context["objquiz"] = objquiz
+        context["topicsquiz"] = topicsq
+        context["questionnumbers"] = qnos
+        context["topicids"] = topicids
+        context["form"] = form
+        context["len"] = len(qnos)
+        context["next"] = nexttopic
+        context["objans"] = objans
+        return context
 
 
 class submitobj(View):
@@ -648,9 +662,11 @@ class submitobj(View):
         topicsq = topicsquiz.objects.filter(topic=question.objquestion.topic)
         j = 0
         qnos = {}
+        topicids = {}
         for i in topicsq:
-            j = j + 1
-            qnos[j] = i.id
+            if i.questiontype == "objective":
+                j = j + 1
+                qnos[j] = i.id
         newid = 0
         for key, value in qnos.items():
             # Check if the current value matches the target value
@@ -683,9 +699,7 @@ class submitobj(View):
 
         # return redirect(redirect_url)
         if x > len(qnos):
-            question.topic.completed = True
-            question.save()
-            return redirect("topic-view", pk=question.topic.id + 1)
+            return redirect("quizpg", pk=getid)
         else:
             return redirect("quizpg", pk=getid)
         # return redirect("quizpg", pk=getid)

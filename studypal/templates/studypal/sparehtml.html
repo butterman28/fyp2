@@ -58,4 +58,30 @@
                      </form>
                      {%endif%}
                      {%endfor%}
-                     
+{%if object.questiontype == "theory" %}
+<h2>{{quiz.question}}</h2>
+<form method="post" action="{% url 'submit-theory' object.id %}">
+    {% csrf_token %}
+    {{ form|crispy}}
+    <button type="submit">Submit</button>
+</form>
+{%endif%}
+
+
+{%if objquiz.answer != j.answerfilled and objquiz.id == j.question.id%}
+        <a class="btn btn-danger" href="#">Wrong</a>
+
+    {%endif%}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Access feedback buttons and perform actions
+            // Example: Hide buttons after 5 seconds
+            setTimeout(function() {
+                console.log("JavaScript code is executing...");
+                var wrongBtn = document.getElementById("wrong-btn");
+                var correctBtn = document.getElementById("correct-btn");
+                console.log(wrongBtn)
+                if (wrongBtn) wrongBtn.style.display = 'none';
+                if (correctBtn) correctBtn.style.display = 'none';
+            }, 5000); // Hide buttons after 5 seconds
+    });

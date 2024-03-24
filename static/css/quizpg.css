@@ -15,6 +15,13 @@
     border-radius: 18px;
 }
 
+.subobj {
+    width: 114px;
+    height: 42px;
+    border-radius: 11px;
+    border: 2px solid #3DB0D6;
+}
+
 .sub {
     width: 114px;
     height: 42px;
