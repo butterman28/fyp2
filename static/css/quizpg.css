@@ -15,11 +15,24 @@
     border-radius: 18px;
 }
 
+.nextbutton {
+    margin-left: 800px;
+
+}
+
 .subobj {
     width: 114px;
     height: 42px;
     border-radius: 11px;
     border: 2px solid #3DB0D6;
+}
+
+.shift {
+    width: 114px;
+    height: 42px;
+    margin-top: 150px;
+    margin-left: 10000px;
+
 }
 
 .sub {

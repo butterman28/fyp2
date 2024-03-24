@@ -64,6 +64,13 @@
         </ol>
     </div>
     <main class="quizmain">
+        {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
     {% block quizcontent %}{% endblock %}
     </main>
     <script>
@@ -73,7 +80,7 @@
             correctbtn.style.display = 'none';
             //hides element (still takes up space on page)
             // box.style.visibility = 'hidden';
-          }, 5000);
+          },2000);
     </script>
     <script>
         setTimeout(() => {
@@ -82,7 +89,83 @@
             wrongbtn.style.display = 'none';        
             //hides element (still takes up spae on page)
             // box.style.visibility = 'hidden';
-          }, 5000);
+          }, 2000);
     </script>
+    <script>
+        setTimeout(() => {
+            var wrongbtn2 = document.getElementById('wrong-btn2');
+            //  removes element from DOM
+            wrongbtn2.style.display = 'none';        
+            //hides element (still takes up spae on page)
+            // box.style.visibility = 'hidden';
+          }, 2000);
+    </script>
+    <script src="" async defer></script>
+    <script>
+      // Initialize a variable to track whether the reading is enabled
+      var readingEnabled = false;
+  
+      // Function to toggle reading status
+      function toggleReading() {
+          readingEnabled = !readingEnabled;
+  
+          // If reading is enabled, read the page content
+          if (readingEnabled) {
+              readText();
+          } else {
+              // If reading is disabled, cancel the ongoing speech
+              window.speechSynthesis.cancel();
+          }
+      }
+  
+      // Function to read the text content of the body
+      function readText() {
+          // Check if the SpeechSynthesis API is supported
+          if ('speechSynthesis' in window) {
+              // Get the text content of the body
+              var mainContent = document.querySelector('main');
+              var textToRead = mainContent.innerText;
+  
+              // Create a new SpeechSynthesisUtterance
+              var utterance = new SpeechSynthesisUtterance();
+              utterance.text = textToRead;
+  
+              // Use the SpeechSynthesis API to speak the text
+              window.speechSynthesis.speak(utterance);
+          } else {
+              console.error('SpeechSynthesis API is not supported in this browser.');
+          }
+      }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const video = document.getElementById('myvideo');
+        const subtitlesContainer = document.getElementById('subtitles-container');
+
+        // Initialize the SpeechRecognition API
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'en-US';
+
+        // Event handler for when speech is recognized
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+
+            // Update subtitles container with the new transcript
+            subtitlesContainer.innerText = transcript;
+        };
+
+        // Event handler for video play
+        video.addEventListener('play', function () {
+            // Start speech recognition when the video starts playing
+            recognition.start();
+        });
+
+        // Event handler for video pause
+        video.addEventListener('pause', function () {
+            // Stop speech recognition when the video is paused
+            recognition.stop();
+        });
+    });
+</script>
 </body>
 </html>

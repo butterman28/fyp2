@@ -33,7 +33,7 @@
     {% if objquiz.answer != j.answerfilled and objquiz.id == j.question.id %}
     <div id="box" class="feedback-buttons">
         <a id="wrong-btn" class="btn btn-danger" href="#">Wrong</a>
-        <a id="wrong-btn" class="btn btn-success" href="#">Correct Answer is {{ objquiz.answer }}</a>
+        <a id="wrong-btn2" class="btn btn-success" href="#">Correct Answer is {{ objquiz.answer }}</a>
     </div>
     {% endif %}
     {%endfor%}
@@ -44,6 +44,8 @@
 <a class="btn btn-success" href="{% url 'topic-view' next  %}">Proceed To next topic</a>
 {% endif %}
 {%endfor%}
+
+
 
 
 
