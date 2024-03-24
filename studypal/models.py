@@ -76,6 +76,11 @@ class subtitles(models.Model):
     subtitle = models.FileField(upload_to="srt_files/")
 
 
+class Completed(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE)
+
+
 class topicsquiz(models.Model):
     topic = models.ForeignKey(topics, on_delete=models.CASCADE)
     question = models.CharField(max_length=5000, blank=False, null=False)

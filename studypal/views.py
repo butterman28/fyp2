@@ -596,6 +596,19 @@ class quizpageView(View):
         return render(request, self.template_name, context)
 
 
+class completed(ListView):
+    model = Completed
+    template_name = "studypal/completed.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["completedcourses"] = Completed.objects.filter(
+            student=self.request.user
+        )
+        return context
+        # completed =
+
+
 class questiondetailview(DetailView):
     model = topicsquiz
     template_name = "studypal/quizpg.html"
@@ -628,11 +641,12 @@ class questiondetailview(DetailView):
                 x = i
                 x = x + 1
                 nexttopic = topicids[x]
+        print(nexttopic)
         print(topicids)
         print(nexttopic)
         print(len(qnos))
         print(qnos)
-        topicobj.objects.filter(objquestion=self.object).exists()
+        # topicobj.objects.filter(objquestion=self.object).exists()
         objquiz = topicobj.objects.get(objquestion=self.object)
         form = ansForm()
         context["objquiz"] = objquiz
@@ -641,7 +655,10 @@ class questiondetailview(DetailView):
         context["topicids"] = topicids
         context["form"] = form
         context["len"] = len(qnos)
-        context["next"] = nexttopic
+        if nexttopic == 0:
+            context["next"] = self.object.topic.id
+        else:
+            context["next"] = nexttopic
         context["objans"] = objans
         return context
 
@@ -701,6 +718,15 @@ class submitobj(View):
 
         # return redirect(redirect_url)
         if x > len(qnos):
+            print(x)
+            if Completed.objects.filter(
+                student=self.request.user, course=question.objquestion.topic.course
+            ).exists():
+                pass
+            else:
+                Completed.objects.create(
+                    student=self.request.user, course=question.objquestion.topic.course
+                )
             return redirect("quizpg", pk=getid)
         else:
             return redirect("quizpg", pk=getid)
@@ -747,8 +773,6 @@ class submitheory(View):
             theoryans.save()
             messages.success(request, "submission Updated!")
         if x > len(qnos):
-            question.topic.completed = True
-            question.save()
             return redirect("topic-view", pk=question.topic.id + 1)
         else:
             return redirect("quizpg", pk=getid)

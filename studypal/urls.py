@@ -51,6 +51,7 @@ urlpatterns = [
     path("coursedashboard/", cousedashboard.as_view(), name="coursedashboard"),
     path("courses/", courseListView.as_view(), name="courses"),
     path("", PostListView.as_view(), name="studypal-home"),
+    path("completed/", completed.as_view(), name="completed"),
     # template views
     path("welcomelecturer/", orientationView.as_view(), name="welcomelecturer"),
     path("welcometeacher/", teacherorientView.as_view(), name="welcometeacher"),

@@ -1,0 +1,21 @@
+{% extends "studypal/maincourse.html" %}
+{% block maincontent %}
+<div class="grid-container">
+    {%for i in completedcourses%}
+    <div class="grid-item">
+        <img
+        class="coimg"
+        src="{{ i.course.coverimage.url }}"
+      />
+        <h2 class="gridheading">{{i.course.name}}</h2>
+            <p> <img
+                class="rounded-circle account-img creatorimage"
+                src="{{ i.course.lecturer.lecturer.samaritanprofile.image.url }}"
+            />{{ i.course.lecturer.lecturer.username }} </p>
+            <a class="btn atagc" href="{% url 'course-detail' i.course.id %}">View Course</a>
+    </div>
+    {% endfor %}
+
+</div>
+
+{%endblock%}
