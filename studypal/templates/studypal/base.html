@@ -84,6 +84,12 @@
                           Profile
                         </a>
                       </li>
+                      <li>
+                        <a href="{% url 'courses' %}" class="nav-link text-white">
+                          <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
+                          Courses
+                        </a>
+                      </li>
                     {% endif %}
                     {% if user.disabilityprofile %}
                     <li>
@@ -119,12 +125,6 @@
                         </a>
                       </li>
                     {% endif %}
-                   <li>
-                      <a href="{% url 'courses' %}" class="nav-link text-white">
-                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
-                        Courses
-                      </a>
-                    </li>
                     <li>
                         <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
                         <form method="post" action="{% url 'logout' %}">
